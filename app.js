@@ -101,27 +101,12 @@ async function tryLoadCSV(prevErr){
     }));
     const n = normalize(arr);
     if(n.length){ window.DATA = n; showBanner('Loaded <b>'+n.length+'</b> items from <code>items.csv</code>.'); return; }
-    showBanner('items.csv loaded but had 0 items. Using sample data.'); window.DATA = normalize(SAMPLE);
+    showBanner('items.csv loaded but had 0 items.'); window.DATA = normalize(SAMPLE);
   }catch(err){
     console.warn('CSV load failed:', err, 'Previous:', prevErr);
-    showBanner('Could not load <b>items.json</b> or <b>items.csv</b>. Using sample data.');
+    showBanner('Could not load <b>items.csv</b>.');
     window.DATA = normalize(SAMPLE);
   }
-}
-
-async function loadData(){
-  try{
-    const r = await fetch('items.json', {cache:'no-store'});
-    if(!r.ok) throw new Error('items.json not found ('+r.status+')');
-    const json = await r.json();
-    const n = normalize(json);
-    if(n.length){ window.DATA = n; showBanner('Loaded <b>'+n.length+'</b> items from <code>items.json</code>.'); }
-    else { showBanner('items.json empty. Trying items.csv…'); await tryLoadCSV(); }
-  }catch(e){
-    await tryLoadCSV(e);
-  }
-  applyQueryFromURL();
-  render();
 }
 
 // search  & make table ----------
@@ -274,7 +259,4 @@ function download(filename, content, type){
 $('#downloadCSV').addEventListener('click', ()=>{
   const csv = toCSV(window.FILTERED.length?window.FILTERED:window.DATA);
   download('arc-raiders-items.csv', csv, 'text/csv');
-});
-$('#downloadJSON').addEventListener('click', ()=>{
-  download('arc-raiders-items.json', JSON.stringify(window.FILTERED.length?window.FILTERED:window.DATA, null, 2), 'application/json');
 });
