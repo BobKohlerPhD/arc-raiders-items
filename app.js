@@ -1,10 +1,10 @@
-// ---------- Utilities ----------
+//  Utilities 
 function showBanner(msg){ const b=document.getElementById('banner'); if(!b) return; b.innerHTML=msg; b.style.display='block'; }
 const $ = s => document.querySelector(s);
 const rowsEl = $('#tbody'), detailEl = $('#detail'), qEl = $('#q'), countBadge = $('#countBadge');
 function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;","~":"~","\"":"&quot;"}[c])); }
 
-// ---------- Delimiter auto-detect CSV/TSV parser ----------
+//  CSV/TSV parser 
 function detectDelimiter(firstLine){
   if(firstLine.includes('\t')) return '\t';
   if(firstLine.includes(',')) return ',';
@@ -12,7 +12,7 @@ function detectDelimiter(firstLine){
   return ','; // default
 }
 
-// RFC4180-ish parser with chosen delimiter
+// chosen delimiter
 function parseCSV(text){
   const nl = text.indexOf('\n');
   const headerLine = nl >= 0 ? text.slice(0,nl) : text;
@@ -27,7 +27,7 @@ function parseCSV(text){
 
     if(q){
       if(c === '"'){
-        if(text[i+1] === '"'){ field += '"'; i+=2; continue; } // escaped quote
+        if(text[i+1] === '"'){ field += '"'; i+=2; continue; }
         q = false; i++; continue;
       }
       field += c; i++; continue;
@@ -53,7 +53,7 @@ function parseCSV(text){
   return { header, rows: objs };
 }
 
-// ---------- Data + normalization ----------
+// 
 const SAMPLE = [
   { name:'Dog Collar', rarity:'Rare', category:'Special / Scrappy',
     uses:['Train Scrappy to Level 2'],
@@ -65,7 +65,7 @@ const SAMPLE = [
     notes:'Common mid-tier crafting material; keep a healthy stock early game.', sources:[] }
 ];
 
-window.DATA = [];       // exposed for console checks
+window.DATA = [];     
 window.FILTERED = [];
 let selectedIndex = -1;
 
@@ -124,7 +124,7 @@ async function loadData(){
   render();
 }
 
-// ---------- Search + render (TABLE) ----------
+// search  & make table ----------
 function search(query){
   const q = (query||'').trim().toLowerCase();
   if(!q) return window.DATA;
@@ -248,10 +248,10 @@ function applyQueryFromURL(){
   }
 }
 
-// kickoff
+// loaddata
 loadData();
 
-// download helpers
+//  helpers
 function toCSV(items){
   const header=['name','rarity','category','uses','safe_to_recycle','recycles_into','notes','sources'];
   const esc = s => '"'+String(s??'').replace(/"/g,'""')+'"';
