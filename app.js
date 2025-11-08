@@ -1,21 +1,24 @@
-
+// ---------- Utilities ----------
 function showBanner(msg){ const b=document.getElementById('banner'); if(!b) return; b.innerHTML=msg; b.style.display='block'; }
 const $ = s => document.querySelector(s);
-const rowsEl = $('#tbody'), qEl = $('#q'), countBadge = $('#countBadge');
+const qEl = $('#q'), countBadge = $('#countBadge');
 
+// lookup tbody fresh each time (prevents null errors)
+function getRowsEl(){ return document.getElementById('tbody'); }
 
+// Safe HTML escaping
 function escapeHtml(s){
   return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
 }
 
-
+// Surface runtime errors
 window.addEventListener('error', (e)=>{
   const m = String(e?.error?.message || e?.message || 'Unknown error');
   const f = e?.filename ? ` <code>${e.filename}:${e.lineno||''}</code>` : '';
   showBanner(`⚠️ Script error: ${m}${f} — see Console for details.`);
 });
 
-
+// ---------- CSV/TSV parser ----------
 function detectDelimiter(firstLine){
   if(firstLine.includes('\t')) return '\t';
   if(firstLine.includes(','))  return ',';
@@ -57,7 +60,7 @@ function parseCSV(text){
   return { header, rows: objs, delimiter: DELIM };
 }
 
-
+// ---------- Data model ----------
 const SAMPLE = [
   { name:'Dog Collar', rarity:'Rare', category:'Special / Scrappy',
     uses:['Train Scrappy to Level 2'],
@@ -99,7 +102,6 @@ async function tryLoadCSV(prevErr){
     const text = await res.text();
     const parsed = parseCSV(text);
     if(!parsed.header.length) throw new Error('CSV has no header row');
-    console.log('[CSV] delimiter:', parsed.delimiter, 'header:', parsed.header);
     const arr = parsed.rows.map(r=>({
       name:r.name, rarity:r.rarity, category:r.category,
       uses:r.uses, recycle_safe:r.recycle_safe, recycle_outputs:r.recycle_outputs,
@@ -129,7 +131,7 @@ async function loadData(){
   render();
 }
 
-
+// ---------- Search ----------
 function search(query){
   const q = (query||'').trim().toLowerCase();
   if(!q) return window.DATA;
@@ -145,7 +147,7 @@ function search(query){
   ));
 }
 
-
+// ---------- Inline detail ----------
 function rarityClass(r){
   return ({
     'common':'r-common','uncommon':'r-uncommon','rare':'r-rare','epic':'r-epic','legendary':'r-legendary'
@@ -170,6 +172,7 @@ function buildDetailHTML(it){
   `;
 }
 function renderInlineDetail(idx){
+  const rowsEl = getRowsEl(); if(!rowsEl) return;
   rowsEl.querySelectorAll('tr.detail-row').forEach(tr=>tr.remove());
   [...rowsEl.children].forEach((tr,i)=>tr.classList.toggle('is-selected', i===idx));
   if(idx < 0 || !window.FILTERED[idx]) return;
@@ -186,11 +189,17 @@ function renderInlineDetail(idx){
   else rowsEl.appendChild(dtr);
 }
 
-
+// ---------- Render ----------
 function render(){
-  const q = qEl.value || '';
+  const rowsEl = getRowsEl();
+  if(!rowsEl){
+    console.warn('tbody#tbody not found; render deferred');
+    return;
+  }
+
+  const q = qEl && qEl.value ? qEl.value : '';
   window.FILTERED = search(q);
-  countBadge.textContent = `${window.FILTERED.length} item${window.FILTERED.length===1?'':'s'}`;
+  if(countBadge) countBadge.textContent = `${window.FILTERED.length} item${window.FILTERED.length===1?'':'s'}`;
   rowsEl.innerHTML = '';
   selectedIndex = -1;
 
@@ -222,7 +231,6 @@ function render(){
     rowsEl.appendChild(tr);
   });
 
-
   document.querySelectorAll('.item-name').forEach(el=>{
     el.addEventListener('click', (ev)=>{ ev.stopPropagation(); select(Number(el.dataset.idx)); });
   });
@@ -233,14 +241,13 @@ function render(){
 
 function select(i){
   selectedIndex = i;
-
   const url = new URL(location);
-  if(qEl.value){ url.searchParams.set('q', qEl.value); } else { url.searchParams.delete('q'); }
+  if(qEl && qEl.value){ url.searchParams.set('q', qEl.value); } else { url.searchParams.delete('q'); }
   history.replaceState(null, '', url);
   renderInlineDetail(i);
 }
 
-
+// ---------- Keyboard + search ----------
 document.addEventListener('keydown', e=>{
   if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
   if(e.key==='ArrowDown'){ e.preventDefault(); if(selectedIndex < window.FILTERED.length-1) select(++selectedIndex); }
@@ -249,22 +256,27 @@ document.addEventListener('keydown', e=>{
 });
 
 let t;
-qEl.addEventListener('input', ()=>{ clearTimeout(t); t=setTimeout(()=>{ syncQueryToURL(); render(); }, 120); });
-$('#clearBtn').addEventListener('click', ()=>{ qEl.value=''; syncQueryToURL(); render(); qEl.focus(); });
+if(qEl){
+  qEl.addEventListener('input', ()=>{ clearTimeout(t); t=setTimeout(()=>{ syncQueryToURL(); render(); }, 120); });
+}
+const clearBtn = document.getElementById('clearBtn');
+if(clearBtn){
+  clearBtn.addEventListener('click', ()=>{ if(qEl){ qEl.value=''; } syncQueryToURL(); render(); if(qEl) qEl.focus(); });
+}
 
 function syncQueryToURL(){
   const url = new URL(location);
-  if(qEl.value){ url.searchParams.set('q', qEl.value); } else { url.searchParams.delete('q'); }
+  if(qEl && qEl.value){ url.searchParams.set('q', qEl.value); } else { url.searchParams.delete('q'); }
   history.replaceState(null, '', url);
 }
 function applyQueryFromURL(){
   const url = new URL(location);
   const q = url.searchParams.get('q') || '';
-  if(q){ qEl.value = q; }
-  window.FILTERED = search(qEl.value||'');
+  if(qEl && q){ qEl.value = q; }
+  window.FILTERED = search(q || '');
 }
 
-
+// ---------- Exports ----------
 function toCSV(items){
   const header=['name','rarity','category','uses','safe_to_recycle','recycles_into','notes','sources'];
   const esc = s => '"'+String(s??'').replace(/"/g,'""')+'"';
@@ -284,13 +296,27 @@ function download(filename, content, type){
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
 }
-$('#downloadCSV').addEventListener('click', ()=>{
-  const csv = toCSV(window.FILTERED.length?window.FILTERED:window.DATA);
-  download('arc-raiders-items.csv', csv, 'text/csv');
-});
-$('#downloadJSON').addEventListener('click', ()=>{
-  download('arc-raiders-items.json', JSON.stringify(window.FILTERED.length?window.FILTERED:window.DATA, null, 2), 'application/json');
-});
+const btnCSV = document.getElementById('downloadCSV');
+if(btnCSV){
+  btnCSV.addEventListener('click', ()=>{
+    const csv = toCSV(window.FILTERED.length?window.FILTERED:window.DATA);
+    download('arc-raiders-items.csv', csv, 'text/csv');
+  });
+}
+const btnJSON = document.getElementById('downloadJSON');
+if(btnJSON){
+  btnJSON.addEventListener('click', ()=>{
+    download('arc-raiders-items.json', JSON.stringify(window.FILTERED.length?window.FILTERED:window.DATA, null, 2), 'application/json');
+  });
+}
 
-
-loadData();
+// ---------- Kickoff (double-safe) ----------
+function start(){
+  applyQueryFromURL();
+  loadData();
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', start);
+}else{
+  start();
+}
