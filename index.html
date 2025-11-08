@@ -335,10 +335,12 @@
 
     // HTML escape
     function escapeHtml(s){
-      return String(s).replace(/[&<>"](/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+      // Fixed regex: the previous pattern had a stray "(" that broke the script and prevented search/results rendering
+      return String(s).replace(/[&<>\"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+    }[c]));
     }
 
     loadData();
   </script>
 </body>
-</html> 
+</html>
