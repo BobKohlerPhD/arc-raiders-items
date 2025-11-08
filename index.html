@@ -6,16 +6,16 @@
   <title>ARC Raiders – Item Lookup</title>
   <style>
     :root{
-      --bg: #0b0f14; --panel:#121822; --ink:#e8eef7; --muted:#9fb1c9; --accent:#5eead4; --accent-2:#7aa2f7; --danger:#ff6b6b; --keep:#fbbf24;
-      --border: #1f2a3a; --chip:#1a2230; --good:#22c55e;
+      --bg:#0b0f14; --panel:#121822; --ink:#e8eef7; --muted:#9fb1c9; --accent:#5eead4; --accent-2:#7aa2f7; --danger:#ff6b6b; --keep:#fbbf24;
+      --border:#1f2a3a; --chip:#1a2230; --good:#22c55e;
     }
-    html,body{height:100%;}
-    body{margin:0;font:16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; background:var(--bg); color:var(--ink);}    
-    .wrap{max-width:1100px;margin:0 auto;padding:28px;}
+    html,body{height:100%}
+    body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";background:var(--bg);color:var(--ink)}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px}
     header{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
     h1{font-size:clamp(20px,3vw,28px);margin:0}
-    .badge{padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--chip);color:var(--muted);}
-    .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;}
+    .badge{padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--chip);color:var(--muted)}
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px}
     .bar{display:flex;gap:10px;align-items:center;padding:12px;border-bottom:1px solid var(--border)}
     .bar input[type="search"]{flex:1;min-width:160px;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:#0e141d;color:var(--ink);outline:none}
     .bar input::placeholder{color:#6b829f}
@@ -26,9 +26,7 @@
     .cell{padding:12px 14px;border-top:1px solid var(--border)}
     .head{position:sticky;top:0;background:linear-gradient(#141c27,#121822);z-index:2;font-weight:600;color:var(--muted)}
     .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--chip);color:var(--muted);font-size:12px}
-    .recycle-yes{color:var(--good)}
-    .recycle-no{color:var(--danger)}
-    .recycle-keep{color:var(--keep)}
+    .recycle-yes{color:var(--good)} .recycle-no{color:var(--danger)} .recycle-keep{color:var(--keep)}
     .muted{color:var(--muted)}
     .stack{display:flex;flex-wrap:wrap;gap:6px}
     .sr{position:absolute;left:-9999px}
@@ -42,9 +40,7 @@
     .toolbar{display:flex;gap:8px;align-items:center;margin-left:auto}
     .tag{padding:2px 8px;border:1px solid var(--border);border-radius:10px;background:var(--chip);color:var(--muted);font-size:12px}
     .footer{margin-top:14px;color:#7c92ae;font-size:13px}
-    @media (max-width: 960px){
-      .split{grid-template-columns: 1fr}
-    }
+    @media (max-width:960px){ .split{grid-template-columns:1fr} .grid{grid-template-columns: 2fr 1fr 1fr 1fr 1fr} }
   </style>
 </head>
 <body>
@@ -56,7 +52,7 @@
       <div class="toolbar">
         <button class="btn" id="downloadCSV">Export CSV</button>
         <button class="btn" id="downloadJSON">Export JSON</button>
-        <span class="tag">Client‑side • Works on GitHub Pages</span>
+        <span class="tag">Client-side • Works on GitHub Pages</span>
       </div>
     </header>
 
@@ -82,350 +78,23 @@
     </section>
 
     <div class="footer">Tip: Press <b>↓ / ↑</b> to move selection, <b>Enter</b> to focus detail, and share a link with the query (we preserve <code>?q=</code> in the URL).</div>
-
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
-
-    function showBanner(msg){ const b = document.getElementById('banner'); if(!b) return; b.innerHTML = msg; b.style.display='block'; }
-
-    async function tryLoadCSV(prevErr){
-      try{
-        const res = await fetch('items.csv', { cache: 'no-store' });
-        if(!res.ok) throw new Error('items.csv not found ('+res.status+')');
-        const text = await res.text();
-        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-        if(parsed.errors && parsed.errors.length){
-          console.warn('CSV parse warnings:', parsed.errors);
-        }
-        const arr = (parsed.data||[]).map(r=>({
-          name: (r.name||'').trim(),
-          rarity: (r.rarity||'').trim(),
-          category: (r.category||'').trim(),
-          uses: (r.uses||'').split(';').map(x=>x.trim()).filter(Boolean),
-          recycle: {
-            safe: (r.recycle_safe||'').trim(),
-            outputs: (r.recycle_outputs||'').split(';').map(x=>x.trim()).filter(Boolean)
-          },
-          notes: (r.notes||'').trim(),
-          sources: (r.sources||'').split(';').map(x=>x.trim()).filter(Boolean)
-        }));
-        DATA = normalize(arr);
-        if(DATA.length){
-          showBanner('Loaded <b>'+DATA.length+'</b> items from <code>items.csv</code>.');
-        } else {
-          showBanner('items.csv loaded but contained 0 items. Using sample data.');
-          DATA = normalize(SAMPLE);
-        }
-      } catch(csvErr){
-        showBanner('Could not load <b>items.json</b> or <b>items.csv</b>. Using sample data.');
-        console.warn('CSV load failed:', csvErr, 'Previous:', prevErr);
-        DATA = normalize(SAMPLE);
-      }
+    // ----- Helpers -----
+    function showBanner(msg){
+      const b = document.getElementById('banner');
+      if(!b) return;
+      b.innerHTML = msg;
+      b.style.display = 'block';
     }
-    function showBanner(msg){ const b = document.getElementById('banner'); if(!b) return; b.innerHTML = msg; b.style.display='block'; }
     const $ = sel => document.querySelector(sel);
     const rowsEl = $('#rows');
     const detailEl = $('#detail');
     const qEl = $('#q');
     const countBadge = $('#countBadge');
 
-
-    const SAMPLE = [
-      {
-        name: 'Dog Collar',
-        rarity: 'Rare',
-        category: 'Special / Scrappy',
-        uses: ['Train Scrappy to Level 2'],
-        recycle: { safe: 'Keep', outputs: ['Fabric', 'Metal Parts'] },
-        notes: 'Needed for companion upgrade. Keep until upgrade complete.',
-        sources: []
-      },
-      {
-        name: 'ARC Alloy',
-        rarity: 'Uncommon',
-        category: 'Topside Material',
-        uses: ['Unlock early stations', 'Projects I ×80'],
-        recycle: { safe: 'Yes', outputs: ['Metal Parts ×2'] },
-        notes: 'Common mid‑tier crafting material.',
-        sources: []
-      },
-      {
-        name: 'Assorted Seeds',
-        rarity: 'Common',
-        category: 'Nature',
-        uses: ['Trade with Celeste', 'Scrappy fruit milestones'],
-        recycle: { safe: 'No', outputs: [] },
-        notes: 'Treat as currency; do not recycle.',
-        sources: []
-      },
-      {
-        name: 'Advanced Electrical Components',
-        rarity: 'Rare',
-        category: 'Refined / Advanced',
-        uses: ['Gear Bench III ×5', 'Utility Station III ×5', 'Project IV ×5'],
-        recycle: { safe: 'Keep', outputs: ['Electrical Components', 'Wires'] },
-        notes: 'Gate for higher bench tiers.',
-        sources: []
-      }
-    ];
-
-    let DATA = []; // loaded items
-    let FILTERED = []; // filtered view
-    let selectedIndex = -1;
-
-    // Attempt to load items.json; fallback to SAMPLE
-    async function loadData(){
-      // Try JSON first
-      try {
-        const res = await fetch('items.json', { cache: 'no-store' });
-        if(!res.ok) throw new Error('items.json not found ('+res.status+')');
-        const json = await res.json();
-        DATA = normalize(json);
-        if(!Array.isArray(json) || !DATA.length){
-          showBanner('items.json loaded but contains no items. Falling back to items.csv or sample data.');
-          await tryLoadCSV();
-        } else {
-          showBanner('Loaded <b>'+DATA.length+'</b> items from <code>items.json</code>.');
-        }
-      } catch(e){
-        console.warn('JSON load failed:', e);
-        await tryLoadCSV(e);
-      }
-      applyQueryFromURL();
-      render();
-    });
-        if(!res.ok) throw new Error('items.json not found ('+res.status+')');
-        const json = await res.json();
-        DATA = normalize(json);
-        showBanner('Loaded <b>'+DATA.length+'</b> items from <code>items.json</code>.');
-        if(!Array.isArray(json) || !DATA.length){
-          showBanner('items.json loaded but contains no items. Using sample data instead.');
-          DATA = normalize(SAMPLE);
-        }
-      } catch(e){
-        console.error(e);
-        showBanner('Could not load <b>items.json</b> ('+ (e.message||e) +'). Using sample data.');
-        DATA = normalize(SAMPLE);
-      }
-      applyQueryFromURL();
-      render();
-    });
-        if(!res.ok) throw new Error('items.json not found');
-        const json = await res.json();
-        DATA = normalize(json);
-      } catch(e){
-        DATA = normalize(SAMPLE);
-        console.warn('Using embedded SAMPLE data. Add items.json to use your full list.');
-      }
-      applyQueryFromURL();
-      render();
-    }
-
-    function normalize(arr){
-      return (arr||[]).map(o=>({
-        name: String(o.name||'').trim(),
-        rarity: String(o.rarity||'').trim(),
-        category: String(o.category||'').trim(),
-        uses: Array.isArray(o.uses) ? o.uses.map(x=>String(x)) : String(o.uses||'').split('|').filter(Boolean),
-        recycle: {
-          safe: (o.recycle && o.recycle.safe) ? String(o.recycle.safe) : (o.safe||'').toString(),
-          outputs: (o.recycle && o.recycle.outputs) ? o.recycle.outputs : String(o.outputs||'').split('|').filter(Boolean)
-        },
-        notes: String(o.notes||'').trim(),
-        sources: Array.isArray(o.sources) ? o.sources : String(o.sources||'').split('|').filter(Boolean)
-      })).sort((a,b)=>a.name.localeCompare(b.name));
-    }
-
-    function search(query){
-      const q = query.trim().toLowerCase();
-      if(!q){
-        return DATA;
-      }
-      const terms = q.split(/\s+/);
-      return DATA.filter(it => terms.every(t => (
-        it.name.toLowerCase().includes(t) ||
-        it.category.toLowerCase().includes(t) ||
-        it.rarity.toLowerCase().includes(t) ||
-        it.uses.join(' ').toLowerCase().includes(t) ||
-        (it.recycle.safe||'').toLowerCase().includes(t) ||
-        it.recycle.outputs.join(' ').toLowerCase().includes(t) ||
-        it.notes.toLowerCase().includes(t)
-      )));
-    }
-
-    function render(){
-      const q = qEl.value || '';
-      FILTERED = search(q);
-      countBadge.textContent = `${FILTERED.length} item${FILTERED.length===1?'':'s'}`;
-      rowsEl.innerHTML = '';
-      selectedIndex = -1;
-
-      if(!FILTERED.length){
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.innerHTML = `<div class="cell" style="grid-column:1 / -1; color:#9fb1c9">No items match your search.</div>`;
-        rowsEl.appendChild(row);
-        detailEl.innerHTML = '';
-        return;
-      }
-
-      FILTERED.forEach((it, i)=>{
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.role = 'row';
-        row.tabIndex = 0;
-        row.addEventListener('click', ()=>{select(i);});
-        row.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ select(i,true); } });
-
-        const recycleClass = (it.recycle.safe||'').toLowerCase()==='yes' ? 'recycle-yes' : ((it.recycle.safe||'').toLowerCase()==='no' ? 'recycle-no' : 'recycle-keep');
-
-        row.innerHTML = `
-          <div class="cell"><a href="#" onclick="return focusItem(${i})">${escapeHtml(it.name)}</a></div>
-          <div class="cell"><span class="pill">${escapeHtml(it.rarity||'')}</span></div>
-          <div class="cell"><span class="pill">${escapeHtml(it.category||'')}</span></div>
-          <div class="cell ${recycleClass}">${escapeHtml(it.recycle.safe||'')}</div>
-          <div class="cell">${escapeHtml((it.recycle.outputs||[]).join(', '))}</div>
-        `;
-        rowsEl.appendChild(row);
-      });
-
-      if(FILTERED.length === 1){ select(0); }
-    } item${FILTERED.length===1?'':'s'}`;
-      rowsEl.innerHTML = '';
-      selectedIndex = -1;
-      FILTERED.forEach((it, i)=>{
-        const row = document.createElement('div');
-        row.className = 'row';
-        row.role = 'row';
-        row.tabIndex = 0;
-        row.addEventListener('click', ()=>{select(i);});
-        row.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ select(i,true); } });
-
-        const recycleClass = (it.recycle.safe||'').toLowerCase()==='yes' ? 'recycle-yes' : ((it.recycle.safe||'').toLowerCase()==='no' ? 'recycle-no' : 'recycle-keep');
-
-        row.innerHTML = `
-          <div class="cell"><a href="#" onclick="return focusItem(${i})">${escapeHtml(it.name)}</a></div>
-          <div class="cell"><span class="pill">${escapeHtml(it.rarity||'')}</span></div>
-          <div class="cell"><span class="pill">${escapeHtml(it.category||'')}</span></div>
-          <div class="cell ${recycleClass}">${escapeHtml(it.recycle.safe||'')}</div>
-          <div class="cell">${escapeHtml(it.recycle.outputs.join(', '))}</div>
-        `;
-        rowsEl.appendChild(row);
-      });
-
-      // If there is exactly one result, select it automatically
-      if(FILTERED.length === 1){ select(0); }
-    }
-
-    function select(i, scrollDetail){
-      selectedIndex = i;
-      const it = FILTERED[i];
-      if(!it) { detailEl.innerHTML=''; return; }
-      const srcLinks = it.sources.map(s=>`<a href="${s}" target="_blank" rel="noopener">source</a>`).join(' · ');
-      const recycleClass = (it.recycle.safe||'').toLowerCase()==='yes' ? 'recycle-yes' : ((it.recycle.safe||'').toLowerCase()==='no' ? 'recycle-no' : 'recycle-keep');
-      detailEl.innerHTML = `
-        <h2>${escapeHtml(it.name)}</h2>
-        <div class="kv"><b>Rarity</b><div>${escapeHtml(it.rarity||'')}</div></div>
-        <div class="kv"><b>Category</b><div>${escapeHtml(it.category||'')}</div></div>
-        <div class="kv"><b>Uses</b><div class="stack">${it.uses.map(u=>`<span class="pill">${escapeHtml(u)}</span>`).join(' ')||'<span class="muted">—</span>'}</div></div>
-        <div class="kv"><b>Safe to recycle?</b><div class="${recycleClass}">${escapeHtml(it.recycle.safe||'')}</div></div>
-        <div class="kv"><b>Recycles into</b><div>${escapeHtml(it.recycle.outputs.join(', ')||'—')}</div></div>
-        <div class="kv"><b>Notes</b><div>${escapeHtml(it.notes||'')}</div></div>
-        <div class="kv"><b>Sources</b><div class="srcs">${srcLinks || '<span class="muted">—</span>'}</div></div>
-        <div class="kv"><b>Link to this</b><div><a id="permalink" href="#">Copy link</a></div></div>
-      `;
-      // update URL with selected item name
-      const url = new URL(location);
-      url.searchParams.set('q', qEl.value);
-      url.hash = encodeURIComponent(it.name);
-      history.replaceState(null, '', url);
-      const linkEl = document.getElementById('permalink');
-      linkEl.href = url.toString();
-      linkEl.onclick = (e)=>{ e.preventDefault(); navigator.clipboard.writeText(url.toString()); linkEl.textContent='Copied!'; setTimeout(()=>linkEl.textContent='Copy link',1200); }
-      if(scrollDetail) detailEl.scrollIntoView({behavior:'smooth',block:'start'});
-    }
-
-    function focusItem(i){ select(i, true); return false; }
-    window.focusItem = focusItem; // expose for inline onclick
-
-    // Keyboard nav
-    document.addEventListener('keydown', (e)=>{
-      if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
-      if(e.key==='ArrowDown'){ e.preventDefault(); if(selectedIndex < FILTERED.length-1) select(selectedIndex+1); }
-      if(e.key==='ArrowUp'){ e.preventDefault(); if(selectedIndex > 0) select(selectedIndex-1); }
-    });
-
-    // Debounced search + URL sync
-    let t;
-    qEl.addEventListener('input', ()=>{
-      clearTimeout(t);
-      t = setTimeout(()=>{ syncQueryToURL(); render(); }, 120);
-    });
-
-    $('#clearBtn').addEventListener('click', ()=>{ qEl.value=''; syncQueryToURL(); render(); qEl.focus(); });
-
-    function syncQueryToURL(){
-      const url = new URL(location);
-      if(qEl.value){ url.searchParams.set('q', qEl.value); } else { url.searchParams.delete('q'); }
-      history.replaceState(null, '', url);
-    }
-
-    function applyQueryFromURL(){
-      const url = new URL(location);
-      const q = url.searchParams.get('q') || '';
-      const anchor = decodeURIComponent(location.hash.slice(1));
-      if(q){ qEl.value = q; }
-      FILTERED = search(qEl.value||'');
-      if(anchor){
-        const idx = FILTERED.findIndex(x=>x.name.toLowerCase()===anchor.toLowerCase());
-        if(idx>=0) { select(idx); }
-      }
-    }
-
-    // Exporters
-    function toCSV(items){
-      const header = ['name','rarity','category','uses','safe_to_recycle','recycles_into','notes','sources'];
-      const esc = s => '"'+String(s||'').replace(/"/g,'""')+'"';
-      const rows = items.map(it=>[
-        esc(it.name),
-        esc(it.rarity),
-        esc(it.category),
-        esc(it.uses.join('; ')),
-        esc(it.recycle.safe||''),
-        esc(it.recycle.outputs.join('; ')),
-        esc(it.notes||''),
-        esc((it.sources||[]).join('; '))
-      ].join(','));
-      return [header.join(','), ...rows].join('\n');
-    }
-
-    function download(filename, content, type){
-      const blob = new Blob([content], {type});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = filename;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
-    }
-
-    $('#downloadCSV').addEventListener('click', ()=>{
-      const csv = toCSV(FILTERED.length?FILTERED:DATA);
-      download('arc-raiders-items.csv', csv, 'text/csv');
-    });
-    $('#downloadJSON').addEventListener('click', ()=>{
-      download('arc-raiders-items.json', JSON.stringify(FILTERED.length?FILTERED:DATA, null, 2), 'application/json');
-    });
-
-    // HTML escape
+    // HTML escape (fixed)
     function escapeHtml(s){
-      // Fixed regex: the previous pattern had a stray "(" that broke the script and prevented search/results rendering
-      return String(s).replace(/[&<>\"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
-    }[c]));
-    }
-
-    loadData();
-  </script>
-</body>
-</html>
+      return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]))
