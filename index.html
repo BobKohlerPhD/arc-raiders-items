@@ -166,6 +166,7 @@
         if(!res.ok) throw new Error('items.json not found ('+res.status+')');
         const json = await res.json();
         DATA = normalize(json);
+        showBanner('Loaded <b>'+DATA.length+'</b> items from <code>items.json</code>.');
         if(!Array.isArray(json) || !DATA.length){
           showBanner('items.json loaded but contains no items. Using sample data instead.');
           DATA = normalize(SAMPLE);
