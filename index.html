@@ -83,36 +83,11 @@
 
     <div class="footer">Tip: Press <b>↓ / ↑</b> to move selection, <b>Enter</b> to focus detail, and share a link with the query (we preserve <code>?q=</code> in the URL).</div>
 
-    <!--
-      =====================
-      DATA FORMAT (items.json or items.csv)
-      =====================
-      Save a file named items.json in this same folder with an array of objects like:
-      [
-        {
-          "name": "Dog Collar",
-          "rarity": "Rare",
-          "category": "Special / Scrappy",
-          "uses": ["Train Scrappy to Level 2"],
-          "recycle": {"safe": "Keep", "outputs": ["Fabric", "Metal Parts"]},
-          "notes": "Needed for companion upgrade. Don’t recycle until done.",
-          "sources": ["https://…/items", "https://…/dog-collar-guide"]
-        }
-      ]
-
-      Or, alternatively, save a file named items.csv with headers:
-      name,rarity,category,uses,recycle_safe,recycle_outputs,notes,sources
-      where list fields are semicolon-separated. Example row:
-      Dog Collar,Rare,Special / Scrappy,"Train Scrappy to Level 2",Keep,"Fabric; Metal Parts","Needed for companion upgrade.","https://…/items; https://…/dog-collar-guide"
-
-      Host index.html with either items.json OR items.csv in your GitHub repo root. The page will auto-detect and use json first, then csv. Enable GitHub Pages (Settings → Pages → Deploy from branch),
-      then visit https://<your-username>.github.io/<repo>/
-    -->
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
-    // --- Minimal utility ---
+
     function showBanner(msg){ const b = document.getElementById('banner'); if(!b) return; b.innerHTML = msg; b.style.display='block'; }
 
     async function tryLoadCSV(prevErr){
@@ -156,7 +131,7 @@
     const qEl = $('#q');
     const countBadge = $('#countBadge');
 
-    // Fallback sample so the page works before you add items.json
+
     const SAMPLE = [
       {
         name: 'Dog Collar',
