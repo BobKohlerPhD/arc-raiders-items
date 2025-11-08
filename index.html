@@ -22,6 +22,8 @@
       /* MAKE DA TABLE */
     .tbl{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden}
     .tbl thead th{position:sticky;top:0;background:linear-gradient(#141c27,#121822);color:var(--muted);text-align:left;padding:12px 14px;border-bottom:1px solid var(--border)}
+    .tbl tbody tr:nth-child(even){ background:#101723; }
+    .tbl tbody tr:hover{ background:#152033; }
     .tbl tbody td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
     .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--chip);color:var(--muted);font-size:12px}
     .recycle-yes{color:var(--good)} .recycle-no{color:var(--danger)} .recycle-keep{color:var(--keep)}
