@@ -1,10 +1,23 @@
-//  Utilities 
+// ---------- Utilities ----------
 function showBanner(msg){ const b=document.getElementById('banner'); if(!b) return; b.innerHTML=msg; b.style.display='block'; }
 const $ = s => document.querySelector(s);
 const rowsEl = $('#tbody'), detailEl = $('#detail'), qEl = $('#q'), countBadge = $('#countBadge');
-function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;","~":"~","\"":"&quot;"}[c])); }
 
-//  CSV/TSV parser 
+// FIXED: proper HTML escape map
+function escapeHtml(s){
+  return String(s).replace(/[&<>"]/g, c => (
+    {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]
+  ));
+}
+
+// Optional: surface runtime errors in the banner so they’re obvious
+window.addEventListener('error', (e)=>{
+  const m = String(e?.error?.message || e?.message || 'Unknown error');
+  const f = e?.filename ? ` <code>${e.filename}:${e.lineno||''}</code>` : '';
+  showBanner(`⚠️ Script error: ${m}${f} — see Console for details.`);
+});
+
+// ---------- CSV/TSV parser ----------
 function detectDelimiter(firstLine){
   if(firstLine.includes('\t')) return '\t';
   if(firstLine.includes(',')) return ',';
@@ -12,7 +25,6 @@ function detectDelimiter(firstLine){
   return ','; // default
 }
 
-// chosen delimiter
 function parseCSV(text){
   const nl = text.indexOf('\n');
   const headerLine = nl >= 0 ? text.slice(0,nl) : text;
@@ -42,7 +54,7 @@ function parseCSV(text){
   pushF(); pushR();
 
   if(rows.length && rows.at(-1).length===1 && rows.at(-1)[0]==='') rows.pop();
-  if(!rows.length) return { header:[], rows:[] };
+  if(!rows.length) return { header:[], rows:[], delimiter: DELIM };
 
   const header = rows[0].map(h=>h.trim());
   const objs = rows.slice(1).map(r=>{
@@ -50,10 +62,10 @@ function parseCSV(text){
     header.forEach((h,idx)=>{ o[h] = (r[idx] ?? '').trim(); });
     return o;
   });
-  return { header, rows: objs };
+  return { header, rows: objs, delimiter: DELIM };
 }
 
-// 
+// ---------- Sample + normalize ----------
 const SAMPLE = [
   { name:'Dog Collar', rarity:'Rare', category:'Special / Scrappy',
     uses:['Train Scrappy to Level 2'],
@@ -65,7 +77,7 @@ const SAMPLE = [
     notes:'Common mid-tier crafting material; keep a healthy stock early game.', sources:[] }
 ];
 
-window.DATA = [];     
+window.DATA = [];
 window.FILTERED = [];
 let selectedIndex = -1;
 
@@ -87,6 +99,7 @@ function normalize(arr){
   })).filter(x=>x.name).sort((a,b)=>a.name.localeCompare(b.name));
 }
 
+// ---------- Loaders ----------
 async function tryLoadCSV(prevErr){
   try{
     const res = await fetch('items.csv', { cache:'no-store' });
@@ -94,6 +107,7 @@ async function tryLoadCSV(prevErr){
     const text = await res.text();
     const parsed = parseCSV(text);
     if(!parsed.header.length) throw new Error('CSV has no header row');
+    console.log('[CSV] delimiter:', parsed.delimiter, 'header:', parsed.header);
     const arr = parsed.rows.map(r=>({
       name:r.name, rarity:r.rarity, category:r.category,
       uses:r.uses, recycle_safe:r.recycle_safe, recycle_outputs:r.recycle_outputs,
@@ -104,12 +118,28 @@ async function tryLoadCSV(prevErr){
     showBanner('items.csv loaded but had 0 items.'); window.DATA = normalize(SAMPLE);
   }catch(err){
     console.warn('CSV load failed:', err, 'Previous:', prevErr);
-    showBanner('Could not load <b>items.csv</b>.');
+    showBanner('Could not load <b>items.csv</b>. Using sample data.');
     window.DATA = normalize(SAMPLE);
   }
 }
 
-// search  & make table ----------
+// MISSING BEFORE → now added: try items.json, then CSV
+async function loadData(){
+  try{
+    const r = await fetch('items.json', { cache:'no-store' });
+    if(!r.ok) throw new Error('items.json not found ('+r.status+')');
+    const json = await r.json();
+    const n = normalize(json);
+    if(n.length){ window.DATA = n; showBanner('Loaded <b>'+n.length+'</b> items from <code>items.json</code>.'); }
+    else { showBanner('items.json empty. Trying items.csv…'); await tryLoadCSV(); }
+  }catch(e){
+    await tryLoadCSV(e);
+  }
+  applyQueryFromURL();
+  render();
+}
+
+// ---------- Search + render (table) ----------
 function search(query){
   const q = (query||'').trim().toLowerCase();
   if(!q) return window.DATA;
@@ -204,7 +234,7 @@ function select(i, scrollDetail){
 function focusItem(i){ select(i,true); return false; }
 window.focusItem = focusItem;
 
-// keyboard + search
+// ---------- Keyboard + search ----------
 document.addEventListener('keydown', e=>{
   if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
   if(e.key==='ArrowDown'){ e.preventDefault(); if(selectedIndex < window.FILTERED.length-1) select(++selectedIndex); }
@@ -233,10 +263,7 @@ function applyQueryFromURL(){
   }
 }
 
-// loaddata
-loadData();
-
-//  helpers
+// ---------- Downloads ----------
 function toCSV(items){
   const header=['name','rarity','category','uses','safe_to_recycle','recycles_into','notes','sources'];
   const esc = s => '"'+String(s??'').replace(/"/g,'""')+'"';
@@ -260,3 +287,9 @@ $('#downloadCSV').addEventListener('click', ()=>{
   const csv = toCSV(window.FILTERED.length?window.FILTERED:window.DATA);
   download('arc-raiders-items.csv', csv, 'text/csv');
 });
+$('#downloadJSON').addEventListener('click', ()=>{
+  download('arc-raiders-items.json', JSON.stringify(window.FILTERED.length?window.FILTERED:window.DATA, null, 2), 'application/json');
+});
+
+// ---------- Kickoff ----------
+loadData();
