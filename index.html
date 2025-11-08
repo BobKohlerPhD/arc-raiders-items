@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ARC Raiders – Item Lookup</title>
   <style>
-    :root{--bg:#0b0f14;--panel:#121822;--ink:#e8eef7;--muted:#9fb1c9;--accent:#5eead4;--accent-2:#7aa2f7;--danger:#ff6b6b;--keep:#fbbf24;--border:#1f2a3a;--chip:#1a2230;--good:#22c55e}
-    html,body{height:100%} body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";background:var(--bg);color:var(--ink)}
+    :root{--bg:#0b0f14;--panel:#121822;--ink:#e8eef7;--muted:#9fb1c9;--danger:#ff6b6b;--keep:#fbbf24;--border:#1f2a3a;--chip:#1a2230;--good:#22c55e}
+    html,body{height:100%}
+    body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";background:var(--bg);color:var(--ink)}
     .wrap{max-width:1100px;margin:0 auto;padding:28px}
     header{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
     h1{font-size:clamp(20px,3vw,28px);margin:0}
@@ -14,23 +15,22 @@
     .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px}
     .bar{display:flex;gap:10px;align-items:center;padding:12px;border-bottom:1px solid var(--border)}
     .bar input[type="search"]{flex:1;min-width:160px;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:#0e141d;color:var(--ink);outline:none}
-    .bar input::placeholder{color:#6b829f}
     .bar .btn{padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:#0e141d;color:var(--ink);cursor:pointer}
-    .bar .btn:hover{border-color:#2b3a50}
-    .grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr}
-    .row{display:contents}
-    .cell{padding:12px 14px;border-top:1px solid var(--border)}
-    .head{position:sticky;top:0;background:linear-gradient(#141c27,#121822);z-index:2;font-weight:600;color:var(--muted)}
-    .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--chip);color:var(--muted);font-size:12px}
-    .recycle-yes{color:var(--good)} .recycle-no{color:var(--danger)} .recycle-keep{color:var(--keep)}
-    .muted{color:var(--muted)} .stack{display:flex;flex-wrap:wrap;gap:6px}
-    .sr{position:absolute;left:-9999px} .split{display:grid;grid-template-columns:2fr 1fr;gap:16px}
-    .detail{padding:16px} .detail h2{margin:0 0 6px;font-size:20px}
-    .kv{display:grid;grid-template-columns:140px 1fr;gap:8px;margin:10px 0}
-    .kv b{color:var(--muted);font-weight:600}
-    .srcs a{color:var(--accent-2);text-decoration:none} .srcs a:hover{text-decoration:underline}
     .toolbar{display:flex;gap:8px;align-items:center;margin-left:auto}
     .tag{padding:2px 8px;border:1px solid var(--border);border-radius:10px;background:var(--chip);color:var(--muted);font-size:12px}
+
+    /* Table */
+    .tbl{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+    .tbl thead th{position:sticky;top:0;background:linear-gradient(#141c27,#121822);color:var(--muted);text-align:left;padding:12px 14px;border-bottom:1px solid var(--border)}
+    .tbl tbody td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--chip);color:var(--muted);font-size:12px}
+    .recycle-yes{color:var(--good)} .recycle-no{color:var(--danger)} .recycle-keep{color:var(--keep)}
+    .muted{color:var(--muted)}
+    .detail{padding:16px}
+    .detail h2{margin:0 0 6px;font-size:20px}
+    .kv{display:grid;grid-template-columns:140px 1fr;gap:8px;margin:10px 0}
+    .kv b{color:var(--muted);font-weight:600}
+    .srcs a{color:#7aa2f7;text-decoration:none} .srcs a:hover{text-decoration:underline}
     .footer{margin-top:14px;color:#7c92ae;font-size:13px}
     @media(max-width:960px){.split{grid-template-columns:1fr}}
   </style>
@@ -48,265 +48,31 @@
       </div>
     </header>
 
-    <section class="panel split" aria-label="Lookup">
-      <div>
-        <div class="bar">
-          <label class="sr" for="q">Search</label>
-          <input id="q" type="search" placeholder="Type an item name… (e.g., Dog Collar, ARC Alloy)" autocomplete="off" />
-          <button class="btn" id="clearBtn">Clear</button>
-        </div>
-        <div class="grid" role="table" aria-label="Item results">
-          <div class="row head" role="row">
-            <div class="cell" role="columnheader">Item</div>
-            <div class="cell" role="columnheader">Rarity</div>
-            <div class="cell" role="columnheader">Category</div>
-            <div class="cell" role="columnheader">Safe to recycle?</div>
-            <div class="cell" role="columnheader">Recycles into</div>
-          </div>
-          <div id="rows"></div>
-        </div>
+    <section class="panel" aria-label="Lookup">
+      <div class="bar">
+        <input id="q" type="search" placeholder="Type an item name… (e.g., Dog Collar, ARC Alloy)" autocomplete="off" />
+        <button class="btn" id="clearBtn">Clear</button>
       </div>
+
+      <table class="tbl" role="table" aria-label="Item results">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Rarity</th>
+            <th>Category</th>
+            <th>Safe to recycle?</th>
+            <th>Recycles into</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+
       <aside class="detail" id="detail" aria-live="polite"></aside>
     </section>
 
-    <div class="footer">Tip: Press <b>↓ / ↑</b> to move selection, <b>Enter</b> to focus detail. Shareable links keep <code>?q=</code> and <code>#item</code>.</div>
+    <div class="footer">Tip: Press <b>↓ / ↑</b> to move selection, <b>Enter</b> to focus detail. Share links with <code>?q=</code> and <code>#item</code>.</div>
   </div>
 
-  <script>
-    // ========= Utilities =========
-    function showBanner(msg){ const b=document.getElementById('banner'); if(!b) return; b.innerHTML=msg; b.style.display='block'; }
-    const $ = s => document.querySelector(s);
-    const rowsEl = $('#rows'), detailEl = $('#detail'), qEl = $('#q'), countBadge = $('#countBadge');
-    function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
-
-    // ========= Tiny RFC4180 CSV parser (no CDN) =========
-    // Returns { header:[], rows:[{...}, ...] }
-    function parseCSV(text){
-      const rows = []; let row = []; let field = '';
-      let i = 0, inQuotes = false;
-      const pushField = ()=>{ row.push(field); field=''; };
-      const pushRow = ()=>{ rows.push(row); row=[]; };
-      while(i < text.length){
-        const c = text[i];
-        if(inQuotes){
-          if(c === '"'){
-            if(text[i+1] === '"'){ field += '"'; i+=2; continue; } // escaped quote
-            inQuotes = false; i++; continue;
-          } else { field += c; i++; continue; }
-        } else {
-          if(c === '"'){ inQuotes = true; i++; continue; }
-          if(c === ','){ pushField(); i++; continue; }
-          if(c === '\r'){ i++; continue; }
-          if(c === '\n'){ pushField(); pushRow(); i++; continue; }
-          field += c; i++;
-        }
-      }
-      // last field/row
-      pushField(); pushRow();
-      // remove trailing blank row if any
-      if(rows.length && rows[rows.length-1].length===1 && rows[rows.length-1][0]==='') rows.pop();
-      if(!rows.length) return {header:[], rows:[]};
-      const header = rows[0];
-      const dataRows = rows.slice(1);
-      const objects = dataRows.map(r=>{
-        const o = {};
-        header.forEach((h,idx)=>{ o[h.trim()] = (r[idx]??'').trim(); });
-        return o;
-      });
-      return {header, rows:objects};
-    }
-
-    // ========= Data + normalization =========
-    const SAMPLE = [
-      { name:'Dog Collar', rarity:'Rare', category:'Special / Scrappy',
-        uses:['Train Scrappy to Level 2'],
-        recycle:{ safe:'Keep', outputs:['Fabric','Metal Parts'] },
-        notes:'Needed for companion upgrade. Keep until upgrade complete.', sources:[] },
-      { name:'ARC Alloy', rarity:'Uncommon', category:'Topside Material',
-        uses:['Explosives/Medical/Utility Station I unlocks','Projects I ×80'],
-        recycle:{ safe:'Yes', outputs:['Metal Parts ×2'] },
-        notes:'Common mid-tier crafting material; keep a healthy stock early game.', sources:[] }
-    ];
-    window.DATA = []; // expose for console
-    window.FILTERED = [];
-    let selectedIndex = -1;
-
-    function normalize(arr){
-      return (arr||[]).map(o=>({
-        name: String(o.name||'').trim(),
-        rarity: String(o.rarity||'').trim(),
-        category: String(o.category||'').trim(),
-        uses: Array.isArray(o.uses) ? o.uses.map(String)
-             : String(o.uses||'').split(/[;|]/).map(s=>s.trim()).filter(Boolean),
-        recycle: {
-          safe: String(o.recycle_safe ?? (o.recycle && o.recycle.safe) ?? o.safe ?? '').trim(),
-          outputs: Array.isArray(o.recycle?.outputs) ? o.recycle.outputs.map(String)
-                 : String(o.recycle_outputs ?? o.outputs ?? '').split(/[;|]/).map(s=>s.trim()).filter(Boolean)
-        },
-        notes: String(o.notes||'').trim(),
-        sources: Array.isArray(o.sources) ? o.sources.map(String)
-               : String(o.sources||'').split(/[;|]/).map(s=>s.trim()).filter(Boolean)
-      })).filter(x=>x.name).sort((a,b)=>a.name.localeCompare(b.name));
-    }
-
-    async function tryLoadCSV(prevErr){
-      try{
-        const res = await fetch('items.csv', { cache:'no-store' });
-        if(!res.ok) throw new Error('items.csv not found ('+res.status+')');
-        const text = await res.text();
-        const parsed = parseCSV(text);
-        if(!parsed.header.length) throw new Error('CSV has no header row');
-        const arr = parsed.rows.map(r=>({
-          name:r.name, rarity:r.rarity, category:r.category,
-          uses:r.uses, recycle_safe:r.recycle_safe, recycle_outputs:r.recycle_outputs,
-          notes:r.notes, sources:r.sources
-        }));
-        const n = normalize(arr);
-        if(n.length){ window.DATA = n; showBanner('Loaded <b>'+n.length+'</b> items from <code>items.csv</code>.'); return; }
-        showBanner('items.csv loaded but had 0 items. Using sample data.'); window.DATA = normalize(SAMPLE);
-      }catch(err){
-        console.warn('CSV load failed:', err, 'Previous:', prevErr);
-        showBanner('Could not load <b>items.json</b> or <b>items.csv</b>. Using sample data.');
-        window.DATA = normalize(SAMPLE);
-      }
-    }
-
-    async function loadData(){
-      // Try items.json first (optional)
-      try{
-        const r = await fetch('items.json', {cache:'no-store'});
-        if(!r.ok) throw new Error('items.json not found ('+r.status+')');
-        const json = await r.json();
-        const n = normalize(json);
-        if(n.length){ window.DATA = n; showBanner('Loaded <b>'+n.length+'</b> items from <code>items.json</code>.'); }
-        else { showBanner('items.json empty. Trying items.csv…'); await tryLoadCSV(); }
-      }catch(e){
-        await tryLoadCSV(e);
-      }
-      applyQueryFromURL();
-      render();
-    }
-
-    // ========= Search + render =========
-    function search(query){
-      const q = (query||'').trim().toLowerCase();
-      if(!q) return window.DATA;
-      const terms = q.split(/\s+/);
-      return window.DATA.filter(it => terms.every(t =>
-        it.name.toLowerCase().includes(t) ||
-        it.category.toLowerCase().includes(t) ||
-        it.rarity.toLowerCase().includes(t) ||
-        it.uses.join(' ').toLowerCase().includes(t) ||
-        (it.recycle.safe||'').toLowerCase().includes(t) ||
-        it.recycle.outputs.join(' ').toLowerCase().includes(t) ||
-        it.notes.toLowerCase().includes(t)
-      ));
-    }
-
-    function render(){
-      const q = qEl.value || '';
-      window.FILTERED = search(q);
-      countBadge.textContent = `${window.FILTERED.length} item${window.FILTERED.length===1?'':'s'}`;
-      rowsEl.innerHTML = '';
-      selectedIndex = -1;
-
-      if(!window.FILTERED.length){
-        const row = document.createElement('div');
-        row.className='row';
-        row.innerHTML = `<div class="cell" style="grid-column:1 / -1; color:#9fb1c9">No items match your search.</div>`;
-        rowsEl.appendChild(row);
-        detailEl.innerHTML = '';
-        return;
-      }
-
-      window.FILTERED.forEach((it,i)=>{
-        const row = document.createElement('div');
-        row.className='row'; row.role='row'; row.tabIndex=0;
-        row.addEventListener('click', ()=>select(i));
-        row.addEventListener('keydown', e=>{ if(e.key==='Enter') select(i,true); });
-
-        const rc = (it.recycle.safe||'').toLowerCase()==='yes' ? 'recycle-yes'
-                 : (it.recycle.safe||'').toLowerCase()==='no' ? 'recycle-no' : 'recycle-keep';
-
-        row.innerHTML = `
-          <div class="cell"><a href="#" onclick="return focusItem(${i})">${escapeHtml(it.name)}</a></div>
-          <div class="cell"><span class="pill">${escapeHtml(it.rarity||'')}</span></div>
-          <div class="cell"><span class="pill">${escapeHtml(it.category||'')}</span></div>
-          <div class="cell ${rc}">${escapeHtml(it.recycle.safe||'')}</div>
-          <div class="cell">${escapeHtml((it.recycle.outputs||[]).join(', '))}</div>
-        `;
-        rowsEl.appendChild(row);
-      });
-
-      if(window.FILTERED.length===1) select(0);
-    }
-
-    function select(i, scrollDetail){
-      const it = window.FILTERED[i]; if(!it){ detailEl.innerHTML=''; return; }
-      const rc = (it.recycle.safe||'').toLowerCase()==='yes' ? 'recycle-yes'
-               : (it.recycle.safe||'').toLowerCase()==='no' ? 'recycle-no' : 'recycle-keep';
-      const srcLinks = (it.sources||[]).map(s=>`<a href="${s}" target="_blank" rel="noopener">source</a>`).join(' · ');
-
-      detailEl.innerHTML = `
-        <h2>${escapeHtml(it.name)}</h2>
-        <div class="kv"><b>Rarity</b><div>${escapeHtml(it.rarity||'')}</div></div>
-        <div class="kv"><b>Category</b><div>${escapeHtml(it.category||'')}</div></div>
-        <div class="kv"><b>Uses</b><div class="stack">${
-          it.uses.length ? it.uses.map(u=>`<span class="pill">${escapeHtml(u)}</span>`).join(' ') : '<span class="muted">—</span>'
-        }</div></div>
-        <div class="kv"><b>Safe to recycle?</b><div class="${rc}">${escapeHtml(it.recycle.safe||'')}</div></div>
-        <div class="kv"><b>Recycles into</b><div>${escapeHtml((it.recycle.outputs||[]).join(', ') || '—')}</div></div>
-        <div class="kv"><b>Notes</b><div>${escapeHtml(it.notes||'')}</div></div>
-        <div class="kv"><b>Sources</b><div class="srcs">${srcLinks || '<span class="muted">—</span>'}</div></div>
-        <div class="kv"><b>Link to this</b><div><a id="permalink" href="#">Copy link</a></div></div>
-      `;
-
-      const url = new URL(location);
-      if(qEl.value){ url.searchParams.set('q', qEl.value); } else { url.searchParams.delete('q'); }
-      url.hash = encodeURIComponent(it.name);
-      history.replaceState(null, '', url);
-
-      const linkEl = document.getElementById('permalink');
-      linkEl.href = url.toString();
-      linkEl.onclick = (e)=>{ e.preventDefault(); navigator.clipboard.writeText(url.toString()); linkEl.textContent='Copied!'; setTimeout(()=>linkEl.textContent='Copy link',1200); }
-      if(scrollDetail) detailEl.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-
-    function focusItem(i){ select(i,true); return false; }
-    window.focusItem = focusItem;
-
-    // keyboard + search
-    document.addEventListener('keydown', e=>{
-      if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
-      if(e.key==='ArrowDown'){ e.preventDefault(); if(selectedIndex < window.FILTERED.length-1) select(++selectedIndex); }
-      if(e.key==='ArrowUp'){ e.preventDefault(); if(selectedIndex > 0) select(--selectedIndex); }
-    });
-    let t; qEl.addEventListener('input', ()=>{ clearTimeout(t); t=setTimeout(()=>{ syncQueryToURL(); render(); },120); });
-    $('#clearBtn').addEventListener('click', ()=>{ qEl.value=''; syncQueryToURL(); render(); qEl.focus(); });
-    function syncQueryToURL(){ const url=new URL(location); if(qEl.value){ url.searchParams.set('q',qEl.value);} else {url.searchParams.delete('q');} history.replaceState(null,'',url); }
-    function applyQueryFromURL(){
-      const url=new URL(location); const q=url.searchParams.get('q')||''; const anchor=decodeURIComponent(location.hash.slice(1));
-      if(q){ qEl.value=q; } window.FILTERED = search(qEl.value||'');
-      if(anchor){ const idx=window.FILTERED.findIndex(x=>x.name.toLowerCase()===anchor.toLowerCase()); if(idx>=0) select(idx); }
-    }
-
-    // exporters
-    function toCSV(items){
-      const header=['name','rarity','category','uses','safe_to_recycle','recycles_into','notes','sources'];
-      const esc = s => '"'+String(s??'').replace(/"/g,'""')+'"';
-      const rows = items.map(it=>[
-        esc(it.name), esc(it.rarity), esc(it.category), esc((it.uses||[]).join('; ')),
-        esc(it.recycle.safe||''), esc((it.recycle.outputs||[]).join('; ')),
-        esc(it.notes||''), esc((it.sources||[]).join('; '))
-      ].join(','));
-      return [header.join(','), ...rows].join('\n');
-    }
-    function download(filename, content, type){ const blob=new Blob([content],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),5000); }
-    $('#downloadCSV').addEventListener('click', ()=>download('arc-raiders-items.csv', toCSV(window.FILTERED.length?window.FILTERED:window.DATA), 'text/csv'));
-    $('#downloadJSON').addEventListener('click', ()=>download('arc-raiders-items.json', JSON.stringify(window.FILTERED.length?window.FILTERED:window.DATA,null,2), 'application/json'));
-
-    // kickoff
-    loadData();
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
