@@ -29,14 +29,18 @@
     .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--chip);color:var(--muted);font-size:12px}
     .recycle-yes{color:var(--good)} .recycle-no{color:var(--danger)} .recycle-keep{color:var(--keep)}
     .muted{color:var(--muted)}
+
     .detail{padding:16px}
     .detail h2{margin:0 0 6px;font-size:20px}
     .kv{display:grid;grid-template-columns:140px 1fr;gap:8px;margin:10px 0}
     .kv b{color:var(--muted);font-weight:600}
     .srcs a{color:#7aa2f7;text-decoration:none} .srcs a:hover{text-decoration:underline}
-    .stack{display:flex;flex-wrap:wrap;gap:6px}   /* ← added */
+    .stack{display:flex;flex-wrap:wrap;gap:6px}
+
+    .item-name{ color:var(--ink); cursor:pointer; text-decoration:none; }
+    .item-name:hover{ color:var(--muted); }
+
     .footer{margin-top:14px;color:#7c92ae;font-size:13px}
-    @media(max-width:960px){.split{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -73,13 +77,14 @@
         </tbody>
       </table>
 
-      <aside class="detail" id="detail" aria-live="polite"></aside>
+      <!-- Detail sits directly under the table so it feels "near" the list -->
+      <div id="detail" class="detail" aria-live="polite"></div>
     </section>
 
     <div class="footer">Tip: Press <b>↓ / ↑</b> to move selection, <b>Enter</b> to focus detail. Share links with <code>?q=</code> and <code>#item</code>.</div>
   </div>
 
-  <!-- Use defer so DOM is ready when app.js runs -->
-  <script defer src="app.js?v=2"></script>
+  <!-- defer ensures DOM exists before JS runs -->
+  <script defer src="app.js?v=3"></script>
 </body>
 </html>
