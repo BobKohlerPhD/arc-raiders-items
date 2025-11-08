@@ -22,7 +22,6 @@
         var(--bg);
     }
 
-    /* Layout */
     .wrap{max-width:1100px;margin:0 auto;padding:28px}
     header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 16px}
     h1{margin:0;font-weight:700;letter-spacing:.2px;font-size:clamp(22px,3.5vw,30px)}
@@ -36,10 +35,8 @@
     .btn:hover{border-color:#2b3a50}
     .tag{padding:2px 8px;border:1px solid var(--border);border-radius:10px;background:var(--chip);color:var(--muted);font-size:12px}
 
-    /* Banner */
     #banner{display:none;margin-bottom:12px;padding:10px 12px;border-radius:10px;border:1px solid #3a2830;background:#2a1616;color:#ffb4b4;font-weight:600}
 
-    /* Panel + search bar */
     .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
     .bar{display:flex;gap:10px;align-items:center;padding:12px;border-bottom:1px solid var(--border);background:linear-gradient(#0f1522,#0e1420)}
     .bar input[type="search"]{
@@ -48,7 +45,6 @@
     }
     .bar .btn{background:#0c1220}
 
-    /* Table */
     .tbl{width:100%;border-collapse:collapse;background:transparent}
     .tbl thead th{
       position:sticky;top:0;background:linear-gradient(#0f1726,#0f1622);color:var(--muted);
@@ -59,17 +55,13 @@
     .tbl tbody tr:hover{background:#142034}
     .tbl tbody td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
 
-    /* Inline detail row under */
-    tr.detail-row td{
-      background:#0e192c; border-top:1px solid var(--border); padding:18px;
-    }
+    tr.detail-row td{ background:#0e192c; border-top:1px solid var(--border); padding:18px; }
     tr.detail-row h3{margin:0 0 8px;font-size:18px}
     tr.detail-row .kv{display:grid;grid-template-columns:160px 1fr;gap:8px;margin:8px 0}
     tr.detail-row .kv b{color:var(--muted);font-weight:600}
     tr.detail-row .stack{display:flex;flex-wrap:wrap;gap:6px}
     .is-selected{outline:1px solid #2b3a50; outline-offset:-1px}
 
-    /* colors */
     .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--chip);color:var(--muted);font-size:12px}
     .r-common{background:#111a28;color:#a9bdd6}
     .r-uncommon{background:#0f1f1a;color:#9ae6b4;border-color:#1e3a2a}
@@ -127,6 +119,7 @@
     <div class="footer">Tip: Press <b>↓ / ↑</b> to move selection, <b>Enter</b> to open inline detail. Share links with <code>?q=</code>.</div>
   </div>
 
-  <script defer src="app.js?v=4"></script>
+  <!-- Defer ensures DOM exists; cache-bust param helps Edge -->
+  <script defer src="app.js?v=5"></script>
 </body>
 </html>
