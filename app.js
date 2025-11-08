@@ -1,13 +1,11 @@
 
 function showBanner(msg){ const b=document.getElementById('banner'); if(!b) return; b.innerHTML=msg; b.style.display='block'; }
 const $ = s => document.querySelector(s);
-const rowsEl = $('#tbody'), detailEl = $('#detail'), qEl = $('#q'), countBadge = $('#countBadge');
+const rowsEl = $('#tbody'), qEl = $('#q'), countBadge = $('#countBadge');
 
 
 function escapeHtml(s){
-  return String(s).replace(/[&<>"]/g, c => (
-    {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]
-  ));
+  return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
 }
 
 
@@ -36,13 +34,10 @@ function parseCSV(text){
   while(i<text.length){
     const c = text[i];
     if(q){
-      if(c === '"'){
-        if(text[i+1] === '"'){ field += '"'; i+=2; continue; }
-        q = false; i++; continue;
-      }
+      if(c === '"'){ if(text[i+1] === '"'){ field+='"'; i+=2; continue; } q=false; i++; continue; }
       field += c; i++; continue;
     }
-    if(c === '"'){ q = true; i++; continue; }
+    if(c === '"'){ q=true; i++; continue; }
     if(c === DELIM){ pushF(); i++; continue; }
     if(c === '\r'){ i++; continue; }
     if(c === '\n'){ pushF(); pushR(); i++; continue; }
@@ -71,7 +66,7 @@ const SAMPLE = [
   { name:'ARC Alloy', rarity:'Uncommon', category:'Topside Material',
     uses:['Explosives/Medical/Utility Station I unlocks','Projects I ×80'],
     recycle:{ safe:'Yes', outputs:['Metal Parts ×2'] },
-    notes:'Common mid-tier crafting material; keep a healthy stock early game.', sources:[] }
+    notes:'Common mid-tier crafting material.', sources:[] }
 ];
 
 window.DATA = [];
@@ -96,7 +91,7 @@ function normalize(arr){
   })).filter(x=>x.name).sort((a,b)=>a.name.localeCompare(b.name));
 }
 
-
+// ---------- Loaders ----------
 async function tryLoadCSV(prevErr){
   try{
     const res = await fetch('items.csv', { cache:'no-store' });
@@ -111,15 +106,14 @@ async function tryLoadCSV(prevErr){
       notes:r.notes, sources:r.sources
     }));
     const n = normalize(arr);
-    if(n.length){ window.DATA = n; showBanner('Loaded <b>'+n.length+'</b> items from <code>items.csv</code>.'); return; }
-    showBanner('items.csv loaded but had 0 items.'); window.DATA = normalize(SAMPLE);
+    window.DATA = n.length ? n : normalize(SAMPLE);
+    showBanner(`Loaded <b>${window.DATA.length}</b> items from <code>${n.length?'items.csv':'sample data'}</code>.`);
   }catch(err){
     console.warn('CSV load failed:', err, 'Previous:', prevErr);
     showBanner('Could not load <b>items.csv</b>. Using sample data.');
     window.DATA = normalize(SAMPLE);
   }
 }
-
 async function loadData(){
   try{
     const r = await fetch('items.json', { cache:'no-store' });
@@ -134,6 +128,7 @@ async function loadData(){
   applyQueryFromURL();
   render();
 }
+
 
 function search(query){
   const q = (query||'').trim().toLowerCase();
@@ -150,6 +145,48 @@ function search(query){
   ));
 }
 
+
+function rarityClass(r){
+  return ({
+    'common':'r-common','uncommon':'r-uncommon','rare':'r-rare','epic':'r-epic','legendary':'r-legendary'
+  }[(r||'').toLowerCase()]) || '';
+}
+function buildDetailHTML(it){
+  const recycleClass =
+    (it.recycle.safe||'').toLowerCase()==='yes' ? 'recycle-yes' :
+    (it.recycle.safe||'').toLowerCase()==='no' ? 'recycle-no' : 'recycle-keep';
+  const srcLinks = (it.sources||[]).map(s=>`<a href="${s}" target="_blank" rel="noopener">source</a>`).join(' · ');
+  return `
+    <h3>${escapeHtml(it.name)}</h3>
+    <div class="kv"><b>Rarity</b><div>${escapeHtml(it.rarity||'')}</div></div>
+    <div class="kv"><b>Category</b><div>${escapeHtml(it.category||'')}</div></div>
+    <div class="kv"><b>Uses</b><div class="stack">${
+      it.uses.length ? it.uses.map(u=>`<span class="pill">${escapeHtml(u)}</span>`).join(' ') : '<span class="muted">—</span>'
+    }</div></div>
+    <div class="kv"><b>Safe to recycle?</b><div class="${recycleClass}">${escapeHtml(it.recycle.safe||'')}</div></div>
+    <div class="kv"><b>Recycles into</b><div>${escapeHtml((it.recycle.outputs||[]).join(', ') || '—')}</div></div>
+    <div class="kv"><b>Notes</b><div>${escapeHtml(it.notes||'')}</div></div>
+    <div class="kv"><b>Sources</b><div class="srcs">${srcLinks || '<span class="muted">—</span>'}</div></div>
+  `;
+}
+function renderInlineDetail(idx){
+  rowsEl.querySelectorAll('tr.detail-row').forEach(tr=>tr.remove());
+  [...rowsEl.children].forEach((tr,i)=>tr.classList.toggle('is-selected', i===idx));
+  if(idx < 0 || !window.FILTERED[idx]) return;
+
+  const after = rowsEl.children[idx];
+  const dtr = document.createElement('tr');
+  dtr.className = 'detail-row';
+  const td = document.createElement('td');
+  td.colSpan = 5;
+  td.innerHTML = buildDetailHTML(window.FILTERED[idx]);
+  dtr.appendChild(td);
+
+  if(after && after.nextSibling) rowsEl.insertBefore(dtr, after.nextSibling);
+  else rowsEl.appendChild(dtr);
+}
+
+
 function render(){
   const q = qEl.value || '';
   window.FILTERED = search(q);
@@ -163,7 +200,6 @@ function render(){
     td.colSpan = 5; td.className = 'muted';
     td.textContent = 'No items match your search.';
     tr.appendChild(td); rowsEl.appendChild(tr);
-    detailEl.innerHTML = '';
     return;
   }
 
@@ -171,17 +207,16 @@ function render(){
     const tr = document.createElement('tr');
     tr.tabIndex = 0;
     tr.addEventListener('click', ()=>select(i));
-    tr.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ select(i,false); } });
 
-    const recycleClass =
+    const rc =
       (it.recycle.safe||'').toLowerCase()==='yes' ? 'recycle-yes' :
       (it.recycle.safe||'').toLowerCase()==='no' ? 'recycle-no' : 'recycle-keep';
 
     tr.innerHTML = `
       <td><span class="item-name" data-idx="${i}">${escapeHtml(it.name)}</span></td>
-      <td><span class="pill">${escapeHtml(it.rarity||'')}</span></td>
+      <td><span class="pill ${rarityClass(it.rarity)}">${escapeHtml(it.rarity||'')}</span></td>
       <td><span class="pill">${escapeHtml(it.category||'')}</span></td>
-      <td class="${recycleClass}">${escapeHtml(it.recycle.safe||'')}</td>
+      <td class="${rc}">${escapeHtml(it.recycle.safe||'')}</td>
       <td>${escapeHtml((it.recycle.outputs||[]).join(', '))}</td>
     `;
     rowsEl.appendChild(tr);
@@ -189,59 +224,28 @@ function render(){
 
 
   document.querySelectorAll('.item-name').forEach(el=>{
-    el.addEventListener('click', ()=>{
-      const i = Number(el.dataset.idx);
-      select(i, false);
-    });
+    el.addEventListener('click', (ev)=>{ ev.stopPropagation(); select(Number(el.dataset.idx)); });
   });
 
-  if(window.FILTERED.length === 1){ select(0, false); }
+  if(window.FILTERED.length === 1){ selectedIndex=0; renderInlineDetail(0); }
+  else { renderInlineDetail(-1); }
 }
 
-function select(i, /*scrollDetail*/ _unused){
+function select(i){
   selectedIndex = i;
-  const it = window.FILTERED[i];
-  if(!it){ detailEl.innerHTML=''; return; }
-
-  const recycleClass =
-    (it.recycle.safe||'').toLowerCase()==='yes' ? 'recycle-yes' :
-    (it.recycle.safe||'').toLowerCase()==='no' ? 'recycle-no' : 'recycle-keep';
-
-  const srcLinks = (it.sources||[]).map(s=>`<a href="${s}" target="_blank" rel="noopener">source</a>`).join(' · ');
-
-  detailEl.innerHTML = `
-    <h2>${escapeHtml(it.name)}</h2>
-    <div class="kv"><b>Rarity</b><div>${escapeHtml(it.rarity||'')}</div></div>
-    <div class="kv"><b>Category</b><div>${escapeHtml(it.category||'')}</div></div>
-    <div class="kv"><b>Uses</b><div class="stack">${
-      it.uses.length ? it.uses.map(u=>`<span class="pill">${escapeHtml(u)}</span>`).join(' ') : '<span class="muted">—</span>'
-    }</div></div>
-    <div class="kv"><b>Safe to recycle?</b><div class="${recycleClass}">${escapeHtml(it.recycle.safe||'')}</div></div>
-    <div class="kv"><b>Recycles into</b><div>${escapeHtml((it.recycle.outputs||[]).join(', ') || '—')}</div></div>
-    <div class="kv"><b>Notes</b><div>${escapeHtml(it.notes||'')}</div></div>
-    <div class="kv"><b>Sources</b><div class="srcs">${srcLinks || '<span class="muted">—</span>'}</div></div>
-    <div class="kv"><b>Link to this</b><div><a id="permalink" href="#">Copy link</a></div></div>
-  `;
-
 
   const url = new URL(location);
   if(qEl.value){ url.searchParams.set('q', qEl.value); } else { url.searchParams.delete('q'); }
-  url.hash = encodeURIComponent(it.name);
   history.replaceState(null, '', url);
-
-  const linkEl = document.getElementById('permalink');
-  linkEl.href = url.toString();
-  linkEl.onclick = (e)=>{ e.preventDefault(); navigator.clipboard.writeText(url.toString()); linkEl.textContent='Copied!'; setTimeout(()=>linkEl.textContent='Copy link',1200); }
+  renderInlineDetail(i);
 }
-
-function focusItem(i){ select(i,false); return false; }
-window.focusItem = focusItem;
 
 
 document.addEventListener('keydown', e=>{
   if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
-  if(e.key==='ArrowDown'){ e.preventDefault(); if(selectedIndex < window.FILTERED.length-1) select(++selectedIndex,false); }
-  if(e.key==='ArrowUp'){ e.preventDefault(); if(selectedIndex > 0) select(--selectedIndex,false); }
+  if(e.key==='ArrowDown'){ e.preventDefault(); if(selectedIndex < window.FILTERED.length-1) select(++selectedIndex); }
+  if(e.key==='ArrowUp'){ e.preventDefault(); if(selectedIndex > 0) select(--selectedIndex); }
+  if(e.key==='Enter' && selectedIndex>=0){ e.preventDefault(); select(selectedIndex); }
 });
 
 let t;
@@ -256,16 +260,11 @@ function syncQueryToURL(){
 function applyQueryFromURL(){
   const url = new URL(location);
   const q = url.searchParams.get('q') || '';
-  const anchor = decodeURIComponent(location.hash.slice(1));
   if(q){ qEl.value = q; }
   window.FILTERED = search(qEl.value||'');
-  if(anchor){
-    const idx = window.FILTERED.findIndex(x=>x.name.toLowerCase()===anchor.toLowerCase());
-    if(idx>=0) { select(idx,false); }
-  }
 }
 
--
+
 function toCSV(items){
   const header=['name','rarity','category','uses','safe_to_recycle','recycles_into','notes','sources'];
   const esc = s => '"'+String(s??'').replace(/"/g,'""')+'"';
