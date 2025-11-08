@@ -122,7 +122,7 @@ async function loadData(){
     if(!r.ok) throw new Error('items.json not found ('+r.status+')');
     const json = await r.json();
     const n = normalize(json);
-    if(n.length){ window.DATA = n; showBanner('Loaded <b>'+n.length+'</b> items from <code>items.json</code>.'); }
+    if(n.length){ window.DATA = n; showBanner('Loaded <b>'+n.length+'</b> items.'); }
     else { showBanner('items.json empty. Trying items.csv…'); await tryLoadCSV(); }
   }catch(e){
     await tryLoadCSV(e);
