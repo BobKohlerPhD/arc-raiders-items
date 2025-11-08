@@ -1,0 +1,1660 @@
+[
+  {
+    "name": "Advanced ARC Powercell",
+    "rarity": "Rare",
+    "category": "Refined / Advanced",
+    "uses": [
+      "Refiner I prerequisite via ARC Powercell"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "ARC Powercell ×2"
+      ]
+    },
+    "notes": "Keep if you still need standard ARC Powercells to unlock/upgrade benches.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Advanced Electrical Components",
+    "rarity": "Rare",
+    "category": "Refined / Advanced",
+    "uses": [
+      "Gear Bench III ×5",
+      "Utility Station III ×5",
+      "Project IV ×5"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Electrical Components",
+        "Wires"
+      ]
+    },
+    "notes": "Gate for higher bench tiers; keep until upgrades complete.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Advanced Mechanical Components",
+    "rarity": "Rare",
+    "category": "Refined / Advanced",
+    "uses": [
+      "Gunsmith III ×5"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Mechanical Components",
+        "Steel Spring"
+      ]
+    },
+    "notes": "Needed for late Gunsmith tier.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Agave",
+    "rarity": "Uncommon",
+    "category": "Nature",
+    "uses": [
+      "Converts to seeds for trading"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Treat as nature currency; either non‑recyclable or converts to Assorted Seeds.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Agave Juice",
+    "rarity": "Common",
+    "category": "Quick Use",
+    "uses": [
+      "Consumable"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Consumables generally cannot be recycled.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Air Freshener",
+    "rarity": "Uncommon",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Trinket; not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Alarm Clock",
+    "rarity": "Rare",
+    "category": "Loot / Recyclable",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Plastic Parts ×6",
+        "Processor ×1"
+      ]
+    },
+    "notes": "Good electronic salvage.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Antiseptic",
+    "rarity": "Rare",
+    "category": "Refined / Medical",
+    "uses": [
+      "Medical Lab III ×8",
+      "Quest: Doctor’s Orders ×2"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Chemicals ×10"
+      ]
+    },
+    "notes": "Bench and quest item; recycle only after upgrades.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Apricot",
+    "rarity": "Uncommon",
+    "category": "Nature",
+    "uses": [
+      "Scrappy Lv3 ×5",
+      "Scrappy Lv5 ×12"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Assorted Seeds ×3"
+      ]
+    },
+    "notes": "Keep for Scrappy companion training milestones.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "ARC Alloy",
+    "rarity": "Uncommon",
+    "category": "Topside Material",
+    "uses": [
+      "Explosives/Medical/Utility Station I unlocks",
+      "Projects I ×80"
+    ],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Metal Parts ×2"
+      ]
+    },
+    "notes": "Common mid‑tier crafting foundation; keep a healthy stack.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "ARC Circuitry",
+    "rarity": "Rare",
+    "category": "Topside Material",
+    "uses": [
+      "Refiner III ×10"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "ARC Alloy ×2"
+      ]
+    },
+    "notes": "Useful for high‑tier refining upgrades.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "ARC Coolant",
+    "rarity": "Rare",
+    "category": "Topside Material",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Chemicals ×16"
+      ]
+    },
+    "notes": "High chemical yield.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "ARC Flex Rubber",
+    "rarity": "Rare",
+    "category": "Topside Material",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Rubber Parts ×16"
+      ]
+    },
+    "notes": "High rubber yield.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "ARC Motion Core",
+    "rarity": "Rare",
+    "category": "Topside Material",
+    "uses": [
+      "Refiner II ×5"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "ARC Alloy ×2"
+      ]
+    },
+    "notes": "Hold if you still need Refiner II.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "ARC Performance Steel",
+    "rarity": "Rare",
+    "category": "Topside Material",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Metal Parts ×12"
+      ]
+    },
+    "notes": "Great metal yield.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "ARC Powercell",
+    "rarity": "Common",
+    "category": "Basic Power",
+    "uses": [
+      "Early bench prerequisites and upgrades"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Foundational power item; non‑recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "ARC Synthetic Resin",
+    "rarity": "Rare",
+    "category": "Topside Material",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Plastic Parts ×14"
+      ]
+    },
+    "notes": "Solid plastic yield.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "ARC Thermo Lining",
+    "rarity": "Rare",
+    "category": "Topside Material",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Fabric ×16"
+      ]
+    },
+    "notes": "Strong fabric yield.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Assorted Seeds",
+    "rarity": "Common",
+    "category": "Nature Currency",
+    "uses": [
+      "Trade with Celeste",
+      "Scrappy fruit milestones"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Treat as currency; don’t recycle.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Bastion Cell",
+    "rarity": "Epic",
+    "category": "Advanced Power",
+    "uses": [
+      "Gear Bench III ×6"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "ARC Motion Core ×2",
+        "Advanced Mechanical Components ×2"
+      ]
+    },
+    "notes": "High‑tier; keep for late benches.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Battery",
+    "rarity": "Uncommon",
+    "category": "Topside Material",
+    "uses": [
+      "Projects III ×30"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Metal Parts ×2"
+      ]
+    },
+    "notes": "Common but needed for projects.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Bicycle Pump",
+    "rarity": "Rare",
+    "category": "Loot / Recyclable",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Canister ×4",
+        "Metal Parts ×10"
+      ]
+    },
+    "notes": "Excellent early‑game salvage.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Bloated Tuna Can",
+    "rarity": "Common",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Flavor item; not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Blown Fuses",
+    "rarity": "Common",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Communication Tower Blue Gate Key",
+    "rarity": "Varies",
+    "category": "Key",
+    "uses": [
+      "Unlocks Blue Gate doors/containers"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Keys are never recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Bombardier Cell",
+    "rarity": "Epic",
+    "category": "Advanced Power",
+    "uses": [
+      "Refiner III ×6"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Advanced Mechanical Components ×2",
+        "ARC Alloy ×2"
+      ]
+    },
+    "notes": "Hold until late‑game benches are finished.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Breathtaking Snow Globe",
+    "rarity": "Epic",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Display item only.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Broken Flashlight",
+    "rarity": "Rare",
+    "category": "Electronic Junk",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Batteries",
+        "Metal Parts",
+        "Wires"
+      ]
+    },
+    "notes": "Standard electronic salvage.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Broken Guidance System",
+    "rarity": "Rare",
+    "category": "Electronic Junk",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Processor",
+        "Sensors",
+        "Wires"
+      ]
+    },
+    "notes": "Valuable electronic parts source.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Broken Handheld Radio",
+    "rarity": "Rare",
+    "category": "Electronic Junk",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Batteries",
+        "Wires",
+        "Processor"
+      ]
+    },
+    "notes": "Good for wires and batteries.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Broken Taser",
+    "rarity": "Rare",
+    "category": "Electronic Junk",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Processor",
+        "Wires"
+      ]
+    },
+    "notes": "Processor salvage.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Buried City Hospital Key",
+    "rarity": "Varies",
+    "category": "Key",
+    "uses": [
+      "Unlocks specific Buried City area"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Keys are not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Burned ARC Circuitry",
+    "rarity": "Uncommon",
+    "category": "Electronic Junk",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "ARC Alloy ×2"
+      ]
+    },
+    "notes": "Breaks down to ARC Alloy.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Burned Tick Pod",
+    "rarity": "Common",
+    "category": "Salvage",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Assorted salvage"
+      ]
+    },
+    "notes": "Basic scrap; recycle unless a quest needs it.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Camera Lens",
+    "rarity": "Uncommon",
+    "category": "Loot / Recyclable",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Plastic Parts ×8"
+      ]
+    },
+    "notes": "Plastic yield.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Candle Holder",
+    "rarity": "Uncommon",
+    "category": "Loot / Recyclable",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Metal Parts ×8"
+      ]
+    },
+    "notes": "Metal yield.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Canister",
+    "rarity": "Uncommon",
+    "category": "Topside Material",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Plastic Parts ×3"
+      ]
+    },
+    "notes": "Common plastic source.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Cat Bed",
+    "rarity": "Uncommon",
+    "category": "Trinket / Scrappy",
+    "uses": [
+      "Scrappy Lv4 ×1"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Keep for Scrappy upgrade.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Chemicals",
+    "rarity": "Common",
+    "category": "Basic Material",
+    "uses": [
+      "Crafting base for many items"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Not recyclable; core crafting input.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Coffee Pot",
+    "rarity": "Common",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Complex Gun Parts",
+    "rarity": "Epic",
+    "category": "Weapon Component",
+    "uses": [
+      "Crafting / component breakdown"
+    ],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Simple Gun Parts ×3"
+      ]
+    },
+    "notes": "Break down if you need base parts.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Coolant",
+    "rarity": "Rare",
+    "category": "Refined / Chemical",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Chemicals ×5",
+        "Oil ×2"
+      ]
+    },
+    "notes": "General chemical salvage.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Cooling Coil",
+    "rarity": "Rare",
+    "category": "Electronic / Mechanical",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Chemicals ×6",
+        "Steel Spring ×2"
+      ]
+    },
+    "notes": "Chemicals and spring.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Cooling Fan",
+    "rarity": "Rare",
+    "category": "Electronic",
+    "uses": [
+      "Projects II ×5"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Plastic Parts ×14",
+        "Wires ×4"
+      ]
+    },
+    "notes": "Keep for projects first.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Cracked Bioscanner",
+    "rarity": "Rare",
+    "category": "Electronic / Medical",
+    "uses": [
+      "Medical Lab II ×2"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Rubber Parts",
+        "Batteries"
+      ]
+    },
+    "notes": "Keep until bench upgrades are done.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Crude Explosives",
+    "rarity": "Uncommon",
+    "category": "Refined / Explosives",
+    "uses": [
+      "Explosives Station II ×5"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Chemicals ×3"
+      ]
+    },
+    "notes": "Bench unlock resource.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Crumpled Plastic Bottle",
+    "rarity": "Uncommon",
+    "category": "Loot / Recyclable",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Plastic Parts ×3–4"
+      ]
+    },
+    "notes": "Simple plastic scrap.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Dam Control Tower Key",
+    "rarity": "Varies",
+    "category": "Key",
+    "uses": [
+      "Unlocks Dam area (Control Tower)"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Keys are never recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Dam Staff Room Key",
+    "rarity": "Varies",
+    "category": "Key",
+    "uses": [
+      "Unlocks Dam Staff Room"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Keys are never recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Dam Surveillance Key",
+    "rarity": "Varies",
+    "category": "Key",
+    "uses": [
+      "Unlocks Dam Surveillance"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Keys are never recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Dam Testing Annex Key",
+    "rarity": "Varies",
+    "category": "Key",
+    "uses": [
+      "Unlocks Dam Testing Annex"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Keys are never recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Dam Utility Key",
+    "rarity": "Varies",
+    "category": "Key",
+    "uses": [
+      "Unlocks Dam Utility areas"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Keys are never recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Damaged ARC Motion Driver",
+    "rarity": "Common",
+    "category": "ARC Salvage",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "ARC Alloy"
+      ]
+    },
+    "notes": "Break down to ARC Alloy.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Damaged ARC Powercell Driver",
+    "rarity": "Common",
+    "category": "ARC Salvage",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "ARC Alloy"
+      ]
+    },
+    "notes": "Break down to ARC Alloy.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Damaged Fireball Driver",
+    "rarity": "Uncommon",
+    "category": "ARC Salvage",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "ARC Alloy",
+        "Crude Explosives"
+      ]
+    },
+    "notes": "Good for explosives chain.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Damaged Hornet Driver",
+    "rarity": "Uncommon",
+    "category": "ARC Salvage",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "ARC Alloy"
+      ]
+    },
+    "notes": "Basic breakdown.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Damaged Rocketeer Driver",
+    "rarity": "Uncommon",
+    "category": "ARC Salvage",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "ARC Alloy"
+      ]
+    },
+    "notes": "Basic breakdown.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Damaged Wasp Driver",
+    "rarity": "Uncommon",
+    "category": "ARC Salvage",
+    "uses": [
+      "Workshop ×8"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "ARC Alloy",
+        "Electrical Components"
+      ]
+    },
+    "notes": "Keep if you still need Workshop upgrades.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Damaged Heat Sink",
+    "rarity": "Rare",
+    "category": "Electronic / Mechanical",
+    "uses": [
+      "Utility Station II ×2"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Metal Parts ×6",
+        "Wires ×2"
+      ]
+    },
+    "notes": "Keep for Utility Station II.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Damaged Snitch Scanner",
+    "rarity": "Common",
+    "category": "Electronic Junk",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Assorted electronic salvage"
+      ]
+    },
+    "notes": "Recycle unless a quest calls for it.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Dartboard",
+    "rarity": "Uncommon",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Deflated Football",
+    "rarity": "Uncommon",
+    "category": "Rubber Junk",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Rubber Parts"
+      ]
+    },
+    "notes": "Basic rubber salvage.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Degraded ARC Rubber",
+    "rarity": "Rare",
+    "category": "Rubber Junk",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Rubber Parts"
+      ]
+    },
+    "notes": "Rubber salvage.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Diving Goggles",
+    "rarity": "Uncommon",
+    "category": "Rubber / Plastic",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Rubber Parts",
+        "Plastic Parts"
+      ]
+    },
+    "notes": "Mixed salvage.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Dog Collar",
+    "rarity": "Rare",
+    "category": "Special / Scrappy",
+    "uses": [
+      "Train Scrappy to Level 2"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Fabric",
+        "Metal Parts"
+      ]
+    },
+    "notes": "Needed for companion upgrade; do not recycle until complete.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Dried-Out ARC Resin",
+    "rarity": "Uncommon",
+    "category": "Plastic Salvage",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Plastic Parts ×9"
+      ]
+    },
+    "notes": "Decent plastic yield.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Duct Tape",
+    "rarity": "Uncommon",
+    "category": "Topside Material",
+    "uses": [],
+    "recycle": {
+      "safe": "Situational",
+      "outputs": [
+        "Fabric"
+      ]
+    },
+    "notes": "Keep or recycle depending on stock.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Durable Cloth",
+    "rarity": "Uncommon",
+    "category": "Refined / Fabric",
+    "uses": [
+      "Medical Lab II ×5",
+      "Project II ×35",
+      "Quest: Doctor’s Orders ×1"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Fabric ×6"
+      ]
+    },
+    "notes": "Hold for benches and quest.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Electrical Components",
+    "rarity": "Uncommon",
+    "category": "Refined / Electronic",
+    "uses": [
+      "Gear Bench II ×5",
+      "Utility Station II ×5",
+      "Project II ×30"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Plastic Parts",
+        "Rubber Parts"
+      ]
+    },
+    "notes": "Bench and project bottleneck; keep first.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Empty Wine Bottle",
+    "rarity": "Common",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Expired Pasta",
+    "rarity": "Common",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Fine Wristwatch",
+    "rarity": "Rare",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Film Reel",
+    "rarity": "Uncommon",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Exodus Module",
+    "rarity": "Epic",
+    "category": "Advanced Electronic",
+    "uses": [
+      "Project III ×1"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Magnet",
+        "Mechanical Components"
+      ]
+    },
+    "notes": "Project‑gated; recycle only when done.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Explosive Compound",
+    "rarity": "Rare",
+    "category": "Refined / Explosives",
+    "uses": [
+      "Explosives Station III ×5"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Crude Explosives ×2"
+      ]
+    },
+    "notes": "Hold for Explosives Station III.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Fabric",
+    "rarity": "Common",
+    "category": "Basic Material",
+    "uses": [
+      "Core crafting input"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Fertilizer",
+    "rarity": "Uncommon",
+    "category": "Nature",
+    "uses": [
+      "Quest: Unexpected Initiative ×1"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Assorted Seeds ×2"
+      ]
+    },
+    "notes": "Quest‑gated; convert to seeds if surplus.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Fireball Burner",
+    "rarity": "Uncommon",
+    "category": "ARC Salvage / Explosives",
+    "uses": [
+      "Refiner II ×8"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "ARC Alloy",
+        "Crude Explosives"
+      ]
+    },
+    "notes": "Useful for mid‑tier benches.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Humidifier",
+    "rarity": "Rare",
+    "category": "Expedition / Project Mat",
+    "uses": [
+      "Expedition stages / projects"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Electronic salvage"
+      ]
+    },
+    "notes": "Commonly required for expedition progress.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Lightbulb",
+    "rarity": "Uncommon",
+    "category": "Expedition / Project Mat",
+    "uses": [
+      "Expedition stages / projects"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Glass / electronic scrap"
+      ]
+    },
+    "notes": "Keep until expedition stages are cleared.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Leaper Pulse Unit",
+    "rarity": "Epic",
+    "category": "Advanced Component",
+    "uses": [
+      "High‑tier benches/projects"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Electronic salvage"
+      ]
+    },
+    "notes": "Late‑game; keep until done.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Magnetic Accelerator",
+    "rarity": "Epic",
+    "category": "Advanced Component",
+    "uses": [
+      "High‑tier benches/projects"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Electronic salvage"
+      ]
+    },
+    "notes": "Late‑game project component.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Lemons",
+    "rarity": "Uncommon",
+    "category": "Nature",
+    "uses": [
+      "Scrappy Lv3 fruit set"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Assorted Seeds"
+      ]
+    },
+    "notes": "Keep for Scrappy milestones.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Metal Parts",
+    "rarity": "—",
+    "category": "Base Output",
+    "uses": [
+      "Universal crafting"
+    ],
+    "recycle": {
+      "safe": "—",
+      "outputs": []
+    },
+    "notes": "Common recycle output; not recycled further.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Rubber Parts",
+    "rarity": "—",
+    "category": "Base Output",
+    "uses": [
+      "Universal crafting"
+    ],
+    "recycle": {
+      "safe": "—",
+      "outputs": []
+    },
+    "notes": "Common recycle output; not recycled further.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Plastic Parts",
+    "rarity": "—",
+    "category": "Base Output",
+    "uses": [
+      "Universal crafting"
+    ],
+    "recycle": {
+      "safe": "—",
+      "outputs": []
+    },
+    "notes": "Common recycle output; not recycled further.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Wires",
+    "rarity": "—",
+    "category": "Base Output",
+    "uses": [
+      "Universal crafting"
+    ],
+    "recycle": {
+      "safe": "—",
+      "outputs": []
+    },
+    "notes": "Common recycle output; not recycled further.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Batteries",
+    "rarity": "—",
+    "category": "Base Output",
+    "uses": [
+      "Universal crafting"
+    ],
+    "recycle": {
+      "safe": "—",
+      "outputs": []
+    },
+    "notes": "Common recycle output; not recycled further.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Sensors",
+    "rarity": "—",
+    "category": "Base Output",
+    "uses": [
+      "Electronics crafting"
+    ],
+    "recycle": {
+      "safe": "—",
+      "outputs": []
+    },
+    "notes": "Recycle output; terminal item.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Processor",
+    "rarity": "—",
+    "category": "Base Output",
+    "uses": [
+      "Electronics crafting"
+    ],
+    "recycle": {
+      "safe": "—",
+      "outputs": []
+    },
+    "notes": "Recycle output; terminal item.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Oil",
+    "rarity": "—",
+    "category": "Base Output",
+    "uses": [
+      "Crafting"
+    ],
+    "recycle": {
+      "safe": "—",
+      "outputs": []
+    },
+    "notes": "Recycle output; terminal item.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Steel Spring",
+    "rarity": "—",
+    "category": "Base Output",
+    "uses": [
+      "Crafting"
+    ],
+    "recycle": {
+      "safe": "—",
+      "outputs": []
+    },
+    "notes": "Recycle output; terminal item.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Mechanical Components",
+    "rarity": "—",
+    "category": "Base Output",
+    "uses": [
+      "Crafting"
+    ],
+    "recycle": {
+      "safe": "—",
+      "outputs": []
+    },
+    "notes": "Recycle output; terminal item.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Simple Gun Parts",
+    "rarity": "Epic",
+    "category": "Weapon Component",
+    "uses": [
+      "Weapon crafting"
+    ],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": []
+    },
+    "notes": "Result of breaking down Complex Gun Parts.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Voltage Converter",
+    "rarity": "Rare",
+    "category": "Electronic",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Wires",
+        "Rubber Parts"
+      ]
+    },
+    "notes": "Solid electronic scrap.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Water Filter",
+    "rarity": "Rare",
+    "category": "Utility",
+    "uses": [],
+    "recycle": {
+      "safe": "Yes",
+      "outputs": [
+        "Assorted salvage"
+      ]
+    },
+    "notes": "Recycle unless needed for a quest.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Water Pump",
+    "rarity": "Rare",
+    "category": "Utility",
+    "uses": [
+      "Quest ×2"
+    ],
+    "recycle": {
+      "safe": "Keep",
+      "outputs": [
+        "Assorted salvage"
+      ]
+    },
+    "notes": "Quest‑gated; keep until complete.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Vase",
+    "rarity": "Uncommon",
+    "category": "Trinket",
+    "uses": [],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Not recyclable.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  },
+  {
+    "name": "Very Comfortable Pillow",
+    "rarity": "Uncommon",
+    "category": "Trinket / Scrappy",
+    "uses": [
+      "Sometimes required for Scrappy milestones"
+    ],
+    "recycle": {
+      "safe": "No",
+      "outputs": []
+    },
+    "notes": "Keep if your companion progression calls for it.",
+    "sources": [
+      "Master index (this chat)"
+    ]
+  }
+]
