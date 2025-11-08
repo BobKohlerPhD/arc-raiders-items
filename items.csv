@@ -1,7 +1,7 @@
 name,rarity,category,uses,recycle_safe,recycle_outputs,notes,sources
-Dog Collar,Rare,Special / Scrappy,Train Scrappy to Level 2,Keep,Fabric; Metal Parts,Needed for companion upgrade. Do not recycle until training is complete.,https://arc-raiders.fandom.com/wiki/Items
-ARC Alloy,Uncommon,Topside Material,Explosives/Medical/Utility Station I unlocks; Projects I ×80,Yes,Metal Parts ×2,Common mid-tier crafting material; keep a healthy stock early game.,https://arc-raiders.fandom.com/wiki/Items
-ARC Powercell,Common,Basic Power,Bench prerequisites and early upgrades,No,,Foundational power item; non-recyclable but used in multiple stations.,https://arc-raiders.fandom.com/wiki/Items
-Advanced Electrical Components,Rare,Refined / Advanced,Gear Bench III ×5; Utility Station III ×5; Project IV ×5,Keep,Electrical Components; Wires,Gate for higher bench tiers; hold until upgrades complete.,https://arc-raiders.fandom.com/wiki/Items
-Antiseptic,Rare,Refined / Medical,Medical Lab III ×8; Quest: Doctor’s Orders ×2,Keep,Chemicals ×10,Bench and quest item; recycle only after upgrades.,https://arc-raiders.fandom.com/wiki/Items
-ARC Thermo Lining,Rare,Topside Material,Thermal crafting and protection modules,Yes,Fabric ×16,High-value fabric yield; safe to recycle when surplus.,https://arc-raiders.fandom.com/wiki/Items
+Dog Collar,Rare,Special / Scrappy,Train Scrappy to Level 2,Keep,"Fabric; Metal Parts","Needed for companion upgrade. Do not recycle until training is complete.",https://arc-raiders.fandom.com/wiki/Items
+ARC Alloy,Uncommon,Topside Material,"Explosives/Medical/Utility Station I unlocks; Projects I ×80",Yes,"Metal Parts ×2","Common mid-tier crafting material; keep a healthy stock early game.",https://arc-raiders.fandom.com/wiki/Items
+ARC Powercell,Common,Basic Power,Bench prerequisites and early upgrades,No,,"Foundational power item; non-recyclable but used in multiple stations.",https://arc-raiders.fandom.com/wiki/Items
+Advanced Electrical Components,Rare,Refined / Advanced,"Gear Bench III ×5; Utility Station III ×5; Project IV ×5",Keep,"Electrical Components; Wires","Gate for higher bench tiers; hold until upgrades complete.",https://arc-raiders.fandom.com/wiki/Items
+Antiseptic,Rare,Refined / Medical,"Medical Lab III ×8; Quest: Doctor’s Orders ×2",Keep,"Chemicals ×10","Bench and quest item; recycle only after upgrades.",https://arc-raiders.fandom.com/wiki/Items
+ARC Thermo Lining,Rare,Topside Material,Thermal crafting and protection modules,Yes,"Fabric ×16","High-value fabric yield; safe to recycle when surplus.",https://arc-raiders.fandom.com/wiki/Items
