@@ -1,30 +1,29 @@
-// ---------- Utilities ----------
+
 function showBanner(msg){ const b=document.getElementById('banner'); if(!b) return; b.innerHTML=msg; b.style.display='block'; }
 const $ = s => document.querySelector(s);
 const rowsEl = $('#tbody'), detailEl = $('#detail'), qEl = $('#q'), countBadge = $('#countBadge');
 
-// FIXED: proper HTML escape map
+
 function escapeHtml(s){
   return String(s).replace(/[&<>"]/g, c => (
     {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]
   ));
 }
 
-// Optional: surface runtime errors in the banner so they’re obvious
+
 window.addEventListener('error', (e)=>{
   const m = String(e?.error?.message || e?.message || 'Unknown error');
   const f = e?.filename ? ` <code>${e.filename}:${e.lineno||''}</code>` : '';
   showBanner(`⚠️ Script error: ${m}${f} — see Console for details.`);
 });
 
-// ---------- CSV/TSV parser ----------
+
 function detectDelimiter(firstLine){
   if(firstLine.includes('\t')) return '\t';
-  if(firstLine.includes(',')) return ',';
-  if(firstLine.includes(';')) return ';';
-  return ','; // default
+  if(firstLine.includes(','))  return ',';
+  if(firstLine.includes(';'))  return ';';
+  return ',';
 }
-
 function parseCSV(text){
   const nl = text.indexOf('\n');
   const headerLine = nl >= 0 ? text.slice(0,nl) : text;
@@ -36,7 +35,6 @@ function parseCSV(text){
 
   while(i<text.length){
     const c = text[i];
-
     if(q){
       if(c === '"'){
         if(text[i+1] === '"'){ field += '"'; i+=2; continue; }
@@ -44,7 +42,6 @@ function parseCSV(text){
       }
       field += c; i++; continue;
     }
-
     if(c === '"'){ q = true; i++; continue; }
     if(c === DELIM){ pushF(); i++; continue; }
     if(c === '\r'){ i++; continue; }
@@ -65,7 +62,7 @@ function parseCSV(text){
   return { header, rows: objs, delimiter: DELIM };
 }
 
-// ---------- Sample + normalize ----------
+
 const SAMPLE = [
   { name:'Dog Collar', rarity:'Rare', category:'Special / Scrappy',
     uses:['Train Scrappy to Level 2'],
@@ -99,7 +96,7 @@ function normalize(arr){
   })).filter(x=>x.name).sort((a,b)=>a.name.localeCompare(b.name));
 }
 
-// ---------- Loaders ----------
+
 async function tryLoadCSV(prevErr){
   try{
     const res = await fetch('items.csv', { cache:'no-store' });
@@ -123,7 +120,6 @@ async function tryLoadCSV(prevErr){
   }
 }
 
-// MISSING BEFORE → now added: try items.json, then CSV
 async function loadData(){
   try{
     const r = await fetch('items.json', { cache:'no-store' });
@@ -139,7 +135,6 @@ async function loadData(){
   render();
 }
 
-// ---------- Search + render (table) ----------
 function search(query){
   const q = (query||'').trim().toLowerCase();
   if(!q) return window.DATA;
@@ -176,7 +171,7 @@ function render(){
     const tr = document.createElement('tr');
     tr.tabIndex = 0;
     tr.addEventListener('click', ()=>select(i));
-    tr.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ select(i,true); } });
+    tr.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ select(i,false); } });
 
     const recycleClass =
       (it.recycle.safe||'').toLowerCase()==='yes' ? 'recycle-yes' :
@@ -192,10 +187,18 @@ function render(){
     rowsEl.appendChild(tr);
   });
 
-  if(window.FILTERED.length === 1){ select(0); }
+
+  document.querySelectorAll('.item-name').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const i = Number(el.dataset.idx);
+      select(i, false);
+    });
+  });
+
+  if(window.FILTERED.length === 1){ select(0, false); }
 }
 
-function select(i, scrollDetail){
+function select(i, /*scrollDetail*/ _unused){
   selectedIndex = i;
   const it = window.FILTERED[i];
   if(!it){ detailEl.innerHTML=''; return; }
@@ -220,6 +223,7 @@ function select(i, scrollDetail){
     <div class="kv"><b>Link to this</b><div><a id="permalink" href="#">Copy link</a></div></div>
   `;
 
+
   const url = new URL(location);
   if(qEl.value){ url.searchParams.set('q', qEl.value); } else { url.searchParams.delete('q'); }
   url.hash = encodeURIComponent(it.name);
@@ -228,17 +232,16 @@ function select(i, scrollDetail){
   const linkEl = document.getElementById('permalink');
   linkEl.href = url.toString();
   linkEl.onclick = (e)=>{ e.preventDefault(); navigator.clipboard.writeText(url.toString()); linkEl.textContent='Copied!'; setTimeout(()=>linkEl.textContent='Copy link',1200); }
-  if(scrollDetail) detailEl.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-function focusItem(i){ select(i,true); return false; }
+function focusItem(i){ select(i,false); return false; }
 window.focusItem = focusItem;
 
-// ---------- Keyboard + search ----------
+
 document.addEventListener('keydown', e=>{
   if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
-  if(e.key==='ArrowDown'){ e.preventDefault(); if(selectedIndex < window.FILTERED.length-1) select(++selectedIndex); }
-  if(e.key==='ArrowUp'){ e.preventDefault(); if(selectedIndex > 0) select(--selectedIndex); }
+  if(e.key==='ArrowDown'){ e.preventDefault(); if(selectedIndex < window.FILTERED.length-1) select(++selectedIndex,false); }
+  if(e.key==='ArrowUp'){ e.preventDefault(); if(selectedIndex > 0) select(--selectedIndex,false); }
 });
 
 let t;
@@ -250,7 +253,6 @@ function syncQueryToURL(){
   if(qEl.value){ url.searchParams.set('q', qEl.value); } else { url.searchParams.delete('q'); }
   history.replaceState(null, '', url);
 }
-
 function applyQueryFromURL(){
   const url = new URL(location);
   const q = url.searchParams.get('q') || '';
@@ -259,11 +261,11 @@ function applyQueryFromURL(){
   window.FILTERED = search(qEl.value||'');
   if(anchor){
     const idx = window.FILTERED.findIndex(x=>x.name.toLowerCase()===anchor.toLowerCase());
-    if(idx>=0) { select(idx); }
+    if(idx>=0) { select(idx,false); }
   }
 }
 
-// ---------- Downloads ----------
+-
 function toCSV(items){
   const header=['name','rarity','category','uses','safe_to_recycle','recycles_into','notes','sources'];
   const esc = s => '"'+String(s??'').replace(/"/g,'""')+'"';
@@ -291,5 +293,5 @@ $('#downloadJSON').addEventListener('click', ()=>{
   download('arc-raiders-items.json', JSON.stringify(window.FILTERED.length?window.FILTERED:window.DATA, null, 2), 'application/json');
 });
 
-// ---------- Kickoff ----------
+
 loadData();
