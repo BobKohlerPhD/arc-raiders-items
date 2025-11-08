@@ -85,7 +85,7 @@
 
     <!--
       =====================
-      DATA FORMAT (items.json)
+      DATA FORMAT (items.json or items.csv)
       =====================
       Save a file named items.json in this same folder with an array of objects like:
       [
@@ -97,17 +97,58 @@
           "recycle": {"safe": "Keep", "outputs": ["Fabric", "Metal Parts"]},
           "notes": "Needed for companion upgrade. Don’t recycle until done.",
           "sources": ["https://…/items", "https://…/dog-collar-guide"]
-        },
-        …
+        }
       ]
 
-      Host both index.html and items.json in your GitHub repo. Enable GitHub Pages (Settings → Pages → Deploy from branch),
+      Or, alternatively, save a file named items.csv with headers:
+      name,rarity,category,uses,recycle_safe,recycle_outputs,notes,sources
+      where list fields are semicolon-separated. Example row:
+      Dog Collar,Rare,Special / Scrappy,"Train Scrappy to Level 2",Keep,"Fabric; Metal Parts","Needed for companion upgrade.","https://…/items; https://…/dog-collar-guide"
+
+      Host index.html with either items.json OR items.csv in your GitHub repo root. The page will auto-detect and use json first, then csv. Enable GitHub Pages (Settings → Pages → Deploy from branch),
       then visit https://<your-username>.github.io/<repo>/
     -->
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
     // --- Minimal utility ---
+    function showBanner(msg){ const b = document.getElementById('banner'); if(!b) return; b.innerHTML = msg; b.style.display='block'; }
+
+    async function tryLoadCSV(prevErr){
+      try{
+        const res = await fetch('items.csv', { cache: 'no-store' });
+        if(!res.ok) throw new Error('items.csv not found ('+res.status+')');
+        const text = await res.text();
+        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+        if(parsed.errors && parsed.errors.length){
+          console.warn('CSV parse warnings:', parsed.errors);
+        }
+        const arr = (parsed.data||[]).map(r=>({
+          name: (r.name||'').trim(),
+          rarity: (r.rarity||'').trim(),
+          category: (r.category||'').trim(),
+          uses: (r.uses||'').split(';').map(x=>x.trim()).filter(Boolean),
+          recycle: {
+            safe: (r.recycle_safe||'').trim(),
+            outputs: (r.recycle_outputs||'').split(';').map(x=>x.trim()).filter(Boolean)
+          },
+          notes: (r.notes||'').trim(),
+          sources: (r.sources||'').split(';').map(x=>x.trim()).filter(Boolean)
+        }));
+        DATA = normalize(arr);
+        if(DATA.length){
+          showBanner('Loaded <b>'+DATA.length+'</b> items from <code>items.csv</code>.');
+        } else {
+          showBanner('items.csv loaded but contained 0 items. Using sample data.');
+          DATA = normalize(SAMPLE);
+        }
+      } catch(csvErr){
+        showBanner('Could not load <b>items.json</b> or <b>items.csv</b>. Using sample data.');
+        console.warn('CSV load failed:', csvErr, 'Previous:', prevErr);
+        DATA = normalize(SAMPLE);
+      }
+    }
     function showBanner(msg){ const b = document.getElementById('banner'); if(!b) return; b.innerHTML = msg; b.style.display='block'; }
     const $ = sel => document.querySelector(sel);
     const rowsEl = $('#rows');
@@ -161,8 +202,25 @@
 
     // Attempt to load items.json; fallback to SAMPLE
     async function loadData(){
+      // Try JSON first
       try {
         const res = await fetch('items.json', { cache: 'no-store' });
+        if(!res.ok) throw new Error('items.json not found ('+res.status+')');
+        const json = await res.json();
+        DATA = normalize(json);
+        if(!Array.isArray(json) || !DATA.length){
+          showBanner('items.json loaded but contains no items. Falling back to items.csv or sample data.');
+          await tryLoadCSV();
+        } else {
+          showBanner('Loaded <b>'+DATA.length+'</b> items from <code>items.json</code>.');
+        }
+      } catch(e){
+        console.warn('JSON load failed:', e);
+        await tryLoadCSV(e);
+      }
+      applyQueryFromURL();
+      render();
+    });
         if(!res.ok) throw new Error('items.json not found ('+res.status+')');
         const json = await res.json();
         DATA = normalize(json);
