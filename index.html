@@ -49,6 +49,7 @@
 </head>
 <body>
   <div class="wrap">
+    <div id="banner" style="display:none;margin-bottom:12px;padding:10px 12px;border-radius:10px;border:1px solid #402e2e;background:#2a1616;color:#ffb4b4;font-weight:600"></div>
     <header>
       <h1>ARC Raiders – Item Lookup</h1>
       <span class="badge" id="countBadge">0 items</span>
@@ -107,6 +108,7 @@
 
   <script>
     // --- Minimal utility ---
+    function showBanner(msg){ const b = document.getElementById('banner'); if(!b) return; b.innerHTML = msg; b.style.display='block'; }
     const $ = sel => document.querySelector(sel);
     const rowsEl = $('#rows');
     const detailEl = $('#detail');
@@ -161,6 +163,21 @@
     async function loadData(){
       try {
         const res = await fetch('items.json', { cache: 'no-store' });
+        if(!res.ok) throw new Error('items.json not found ('+res.status+')');
+        const json = await res.json();
+        DATA = normalize(json);
+        if(!Array.isArray(json) || !DATA.length){
+          showBanner('items.json loaded but contains no items. Using sample data instead.');
+          DATA = normalize(SAMPLE);
+        }
+      } catch(e){
+        console.error(e);
+        showBanner('Could not load <b>items.json</b> ('+ (e.message||e) +'). Using sample data.');
+        DATA = normalize(SAMPLE);
+      }
+      applyQueryFromURL();
+      render();
+    });
         if(!res.ok) throw new Error('items.json not found');
         const json = await res.json();
         DATA = normalize(json);
@@ -208,6 +225,40 @@
       const q = qEl.value || '';
       FILTERED = search(q);
       countBadge.textContent = `${FILTERED.length} item${FILTERED.length===1?'':'s'}`;
+      rowsEl.innerHTML = '';
+      selectedIndex = -1;
+
+      if(!FILTERED.length){
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `<div class="cell" style="grid-column:1 / -1; color:#9fb1c9">No items match your search.</div>`;
+        rowsEl.appendChild(row);
+        detailEl.innerHTML = '';
+        return;
+      }
+
+      FILTERED.forEach((it, i)=>{
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.role = 'row';
+        row.tabIndex = 0;
+        row.addEventListener('click', ()=>{select(i);});
+        row.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ select(i,true); } });
+
+        const recycleClass = (it.recycle.safe||'').toLowerCase()==='yes' ? 'recycle-yes' : ((it.recycle.safe||'').toLowerCase()==='no' ? 'recycle-no' : 'recycle-keep');
+
+        row.innerHTML = `
+          <div class="cell"><a href="#" onclick="return focusItem(${i})">${escapeHtml(it.name)}</a></div>
+          <div class="cell"><span class="pill">${escapeHtml(it.rarity||'')}</span></div>
+          <div class="cell"><span class="pill">${escapeHtml(it.category||'')}</span></div>
+          <div class="cell ${recycleClass}">${escapeHtml(it.recycle.safe||'')}</div>
+          <div class="cell">${escapeHtml((it.recycle.outputs||[]).join(', '))}</div>
+        `;
+        rowsEl.appendChild(row);
+      });
+
+      if(FILTERED.length === 1){ select(0); }
+    } item${FILTERED.length===1?'':'s'}`;
       rowsEl.innerHTML = '';
       selectedIndex = -1;
       FILTERED.forEach((it, i)=>{
