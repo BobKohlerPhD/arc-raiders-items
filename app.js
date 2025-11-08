@@ -183,7 +183,7 @@ function render(){
       (it.recycle.safe||'').toLowerCase()==='no' ? 'recycle-no' : 'recycle-keep';
 
     tr.innerHTML = `
-      <td><a href="#" onclick="return focusItem(${i})">${escapeHtml(it.name)}</a></td>
+      <td><span class="item-name" data-idx="${i}">${escapeHtml(it.name)}</span></td>
       <td><span class="pill">${escapeHtml(it.rarity||'')}</span></td>
       <td><span class="pill">${escapeHtml(it.category||'')}</span></td>
       <td class="${recycleClass}">${escapeHtml(it.recycle.safe||'')}</td>
