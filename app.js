@@ -1,24 +1,24 @@
-// ---------- Utilities ----------
+
 function showBanner(msg){ const b=document.getElementById('banner'); if(!b) return; b.innerHTML=msg; b.style.display='block'; }
 const $ = s => document.querySelector(s);
 const qEl = $('#q'), countBadge = $('#countBadge');
 
-// lookup tbody fresh each time (prevents null errors)
+
 function getRowsEl(){ return document.getElementById('tbody'); }
 
-// Safe HTML escaping
+
 function escapeHtml(s){
   return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
 }
 
-// Surface runtime errors
+
 window.addEventListener('error', (e)=>{
   const m = String(e?.error?.message || e?.message || 'Unknown error');
   const f = e?.filename ? ` <code>${e.filename}:${e.lineno||''}</code>` : '';
   showBanner(`⚠️ Script error: ${m}${f} — see Console for details.`);
 });
 
-// ---------- CSV/TSV parser ----------
+
 function detectDelimiter(firstLine){
   if(firstLine.includes('\t')) return '\t';
   if(firstLine.includes(','))  return ',';
@@ -60,7 +60,7 @@ function parseCSV(text){
   return { header, rows: objs, delimiter: DELIM };
 }
 
-// ---------- Data model ----------
+
 const SAMPLE = [
   { name:'Dog Collar', rarity:'Rare', category:'Special / Scrappy',
     uses:['Train Scrappy to Level 2'],
@@ -94,7 +94,7 @@ function normalize(arr){
   })).filter(x=>x.name).sort((a,b)=>a.name.localeCompare(b.name));
 }
 
-// ---------- Loaders ----------
+
 async function tryLoadCSV(prevErr){
   try{
     const res = await fetch('items.csv', { cache:'no-store' });
@@ -131,7 +131,7 @@ async function loadData(){
   render();
 }
 
-// ---------- Search ----------
+
 function search(query){
   const q = (query||'').trim().toLowerCase();
   if(!q) return window.DATA;
@@ -147,7 +147,7 @@ function search(query){
   ));
 }
 
-// ---------- Inline detail ----------
+
 function rarityClass(r){
   return ({
     'common':'r-common','uncommon':'r-uncommon','rare':'r-rare','epic':'r-epic','legendary':'r-legendary'
@@ -189,7 +189,7 @@ function renderInlineDetail(idx){
   else rowsEl.appendChild(dtr);
 }
 
-// ---------- Render ----------
+
 function render(){
   const rowsEl = getRowsEl();
   if(!rowsEl){
@@ -247,7 +247,7 @@ function select(i){
   renderInlineDetail(i);
 }
 
-// ---------- Keyboard + search ----------
+
 document.addEventListener('keydown', e=>{
   if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
   if(e.key==='ArrowDown'){ e.preventDefault(); if(selectedIndex < window.FILTERED.length-1) select(++selectedIndex); }
@@ -276,7 +276,7 @@ function applyQueryFromURL(){
   window.FILTERED = search(q || '');
 }
 
-// ---------- Exports ----------
+
 function toCSV(items){
   const header=['name','rarity','category','uses','safe_to_recycle','recycles_into','notes','sources'];
   const esc = s => '"'+String(s??'').replace(/"/g,'""')+'"';
@@ -310,7 +310,7 @@ if(btnJSON){
   });
 }
 
-// ---------- Kickoff (double-safe) ----------
+
 function start(){
   applyQueryFromURL();
   loadData();
