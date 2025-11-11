@@ -1,4 +1,4 @@
-// Clear, unambiguous banner handling + robust CSV load
+
 const ASSET_VERSION = 'v7';
 
 const $ = (s) => document.querySelector(s);
@@ -20,7 +20,7 @@ window.addEventListener('error', (e)=>{
   bannerWarn(`⚠️ Script error: ${m}${f} — see Console for details.`);
 });
 
-// ---------- Lightweight CSV parser ----------
+
 function detectDelimiter(firstLine){
   if(firstLine.includes('\t')) return '\t';
   if(firstLine.includes(','))  return ',';
@@ -61,7 +61,7 @@ function parseCSV(text){
   return { header, rows: objs };
 }
 
-// ---------- Normalization ----------
+//  Normalization 
 function normalize(arr){
   return arr.map(o=>({
     name: String(o.name||'').trim(),
@@ -80,7 +80,7 @@ function normalize(arr){
   })).filter(x=>x.name).sort((a,b)=>a.name.localeCompare(b.name));
 }
 
-// ---------- Data ----------
+//  Data 
 const SAMPLE = [
   { name:'Dog Collar', rarity:'Rare', category:'Special / Scrappy',
     uses:['Train Scrappy to Level 2'],
@@ -94,7 +94,7 @@ const SAMPLE = [
 
 // Returns {data:Array, from:'csv'|'sample'}
 async function loadItems(){
-  // hard cache-bust for CSV
+  // cache-bust CSV
   const csvUrl = `items.csv?${ASSET_VERSION}=${Date.now()}`;
   try{
     const res = await fetch(csvUrl, { cache:'no-store' });
@@ -111,7 +111,7 @@ async function loadItems(){
   }
 }
 
-// ---------- Search & render ----------
+// search
 function tokenize(q){ return String(q||'').toLowerCase().split(/\s+/).filter(Boolean); }
 function search(q, data){
   const toks = tokenize(q);
@@ -216,7 +216,6 @@ function render(){
   });
 }
 
-// ---------- Export buttons ----------
 function toCSV(arr){
   const header = ['name','rarity','category','uses','recycle_safe','recycle_outputs','notes','sources'];
   const rows = arr.map(it=>[
@@ -249,9 +248,8 @@ document.addEventListener('click', (e)=>{
   }
 });
 
-// ---------- Kickoff ----------
 async function start(){
-  // clear any old service workers
+
   if('serviceWorker' in navigator){ navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())); }
   // load
   const {data, from} = await loadItems();
