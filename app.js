@@ -109,7 +109,7 @@ async function tryLoadCSV(prevErr){
     }));
     const n = normalize(arr);
     window.DATA = n.length ? n : normalize(SAMPLE);
-    showBanner(`Loaded <b>${window.DATA.length}</b> items from <code>${n.length?'items.csv':'sample data'}</code>.`);
+    showBanner(`Loaded <b>${window.DATA.length}</b> items':'sample data'}</code>.`);
   }catch(err){
     console.warn('CSV load failed:', err, 'Previous:', prevErr);
     showBanner('Could not load <b>items.csv</b>. Using sample data.');
