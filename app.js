@@ -7,7 +7,7 @@ const countBadge = $('#countBadge');
 // --- UTILS ---
 function bannerOk(msg){
   const b = document.getElementById('banner'); if(!b) return;
-  b.style.display = 'none'; // We don't need a banner for success in this UI
+  b.style.display = 'none'; 
 }
 function bannerWarn(msg){
   const b = document.getElementById('banner'); if(!b) return;
