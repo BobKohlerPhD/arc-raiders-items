@@ -3,101 +3,317 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ARC Raiders – Item Lookup</title>
+  <title>ARC // ITEM_DB</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  
   <style>
-    :root{
-      --bg:#0b0f14; --panel:#0f1622; --ink:#e8eef7; --muted:#9fb1c9;
-      --border:#1f2a3a; --chip:#162133; --chip-2:#101a2a;
-      --good:#22c55e; --warn:#fbbf24; --bad:#ff6b6b; --brand:#5eead4; --brand-2:#7aa2f7;
-      --shadow:0 10px 30px rgba(0,0,0,.28);
+    :root {
+      --bg: #050505;
+      --panel: #0c0c0f;
+      --panel-border: #25252d;
+      --text-main: #e0e0e0;
+      --text-muted: #6b7280;
+      
+      --accent-primary: #ff3e3e; /* Raider Red */
+      --accent-glow: rgba(255, 62, 62, 0.2);
+      
+      --good: #4ade80;
+      --warn: #fbbf24;
+      --bad: #f87171;
+      
+      --font-tech: 'JetBrains Mono', monospace;
+      --font-ui: 'Inter', sans-serif;
     }
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--ink);
-      font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,Helvetica,Arial;
-      background:
-        radial-gradient(60rem 60rem at 10% -10%, #11213566 0%, #0b0f14 55%),
-        radial-gradient(60rem 60rem at 110% 10%, #0d1f2b66 0%, #0b0f14 45%),
-        var(--bg);
+
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; margin: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 0%, #1a1a20 0%, var(--bg) 60%);
+      color: var(--text-main);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      overflow-x: hidden;
     }
-    .wrap{max-width:1100px;margin:0 auto;padding:28px}
-    header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 16px}
-    h1{margin:0;font-weight:700;letter-spacing:.2px;font-size:clamp(22px,3.5vw,30px)}
-    .sub{color:#7c92ae;font-size:14px;margin-left:2px}
-    .badge{padding:4px 10px;border:1px solid var(--border);border-radius:999px;background:var(--chip);color:var(--muted)}
-    .toolbar{display:flex;align-items:center;gap:8px;margin-left:auto}
-    .btn{
-      appearance:none; border:1px solid var(--border); background:linear-gradient(#0f1724,#0d1420);
-      color:var(--ink); padding:10px 12px; border-radius:12px; cursor:pointer; box-shadow:var(--shadow);
+
+    /* Scanline Overlay */
+    body::after {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      z-index: 2;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
     }
-    .btn:hover{border-color:#2b3a50}
-    .tag{padding:2px 8px;border:1px solid var(--border);border-radius:10px;background:var(--chip);color:var(--muted);font-size:12px}
-    #banner{display:none;margin-bottom:12px;padding:10px 12px;border-radius:10px;border:1px solid #3a2830;background:#2a1616;color:#ffb4b4;font-weight:600}
-    #banner.ok{ background:#112417; border-color:#1e3a2f; color:#b7f7c2; }
-    .panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
-    .bar{display:flex;gap:10px;align-items:center;padding:12px;border-bottom:1px solid var(--border);background:linear-gradient(#0f1522,#0e1420)}
-    .bar input[type="search"]{
-      flex:1;min-width:160px;padding:12px 14px;border-radius:12px;border:1px solid var(--border);
-      background:#0c1220;color:var(--ink);outline:none; box-shadow:inset 0 0 0 9999px transparent, var(--shadow);
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 1;
     }
-    .bar .btn{background:#0c1220}
-    .tbl{width:100%;border-collapse:collapse;background:transparent}
-    .tbl thead th{
-      position:sticky;top:0;background:linear-gradient(#0f1726,#0f1622);color:var(--muted);
-      text-align:left;padding:12px 14px;border-bottom:1px solid var(--border);font-weight:600;
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 30px;
+      border-bottom: 2px solid var(--panel-border);
+      padding-bottom: 15px;
     }
-    .tbl tbody tr{transition:background .15s ease}
-    .tbl tbody tr:nth-child(even){background:#0f1623}
-    .tbl tbody tr:hover{background:#142034}
-    .tbl tbody td{padding:12px 14px;border-top:1px solid var(--border);vertical-align:top}
-    tr.detail-row td{ background:#0e192c; border-top:1px solid var(--border); padding:18px; }
-    tr.detail-row h3{margin:0 0 8px;font-size:18px}
-    tr.detail-row .kv{display:grid;grid-template-columns:160px 1fr;gap:8px;margin:8px 0}
-    tr.detail-row .kv b{color:var(--muted);font-weight:600}
-    tr.detail-row .stack{display:flex;flex-wrap:wrap;gap:6px}
-    .is-selected{outline:1px solid #2b3a50; outline-offset:-1px}
-    .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--chip);color:var(--muted);font-size:12px}
-    .r-common{background:#111a28;color:#a9bdd6}
-    .r-uncommon{background:#0f1f1a;color:#9ae6b4;border-color:#1e3a2a}
-    .r-rare{background:#111a2a;color:#93c5fd;border-color:#213457}
-    .r-epic{background:#1b1230;color:#d8b4fe;border-color:#2f2255}
-    .r-legendary{background:#2b170a;color:#facc15;border-color:#533214}
-    .recycle-yes{color:var(--good)} .recycle-no{color:var(--bad)} .recycle-keep{color:var(--warn)}
-    .muted{color:var(--muted)}
-    .item-name{color:var(--ink);cursor:pointer;text-decoration:none}
-    .item-name:hover{color:var(--muted)}
-    .footer{margin-top:14px;color:#7c92ae;font-size:13px}
+
+    h1 {
+      margin: 0;
+      font-family: var(--font-tech);
+      font-weight: 800;
+      font-size: clamp(24px, 4vw, 36px);
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      color: var(--text-main);
+      text-shadow: 0 0 20px var(--accent-glow);
+    }
+    
+    h1 span { color: var(--accent-primary); }
+
+    .badge {
+      font-family: var(--font-tech);
+      background: rgba(255,255,255,0.05);
+      padding: 4px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--panel-border);
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    /* Controls */
+    .panel-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: var(--panel);
+      padding: 10px;
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+    }
+
+    #q {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-family: var(--font-tech);
+      font-size: 16px;
+      padding: 10px;
+    }
+    
+    #q:focus { outline: none; }
+    #q::placeholder { color: #40404a; }
+
+    .btn {
+      background: var(--panel-border);
+      border: none;
+      color: var(--text-main);
+      padding: 0 15px;
+      border-radius: 4px;
+      font-family: var(--font-tech);
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    .btn:hover { background: var(--accent-primary); color: #000; }
+
+    /* Data Table */
+    .table-container {
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      background: rgba(12, 12, 15, 0.7);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .tbl {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .tbl th {
+      font-family: var(--font-tech);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      padding: 15px 20px;
+      background: #0f0f12;
+      border-bottom: 1px solid var(--panel-border);
+    }
+
+    .tbl td {
+      padding: 16px 20px;
+      border-bottom: 1px solid #1a1a20;
+      color: #c0c0c0;
+      font-weight: 500;
+      vertical-align: top;
+    }
+
+    .tbl tr { transition: background 0.15s; cursor: pointer; }
+    .tbl tr:hover { background: rgba(255,255,255,0.03); }
+
+    /* Specific Columns */
+    .item-name { 
+      font-weight: 700; 
+      color: #fff; 
+      font-family: var(--font-tech);
+      font-size: 15px;
+    }
+    
+    /* Pills & Badges */
+    .pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-family: var(--font-tech);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-right: 4px;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Rarities */
+    .r-common { color: #9ca3af; background: rgba(156, 163, 175, 0.1); border: 1px solid rgba(156, 163, 175, 0.2); }
+    .r-uncommon { color: #4ade80; background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.2); }
+    .r-rare { color: #60a5fa; background: rgba(96, 165, 250, 0.1); border: 1px solid rgba(96, 165, 250, 0.2); }
+    .r-epic { color: #c084fc; background: rgba(192, 132, 252, 0.1); border: 1px solid rgba(192, 132, 252, 0.2); }
+    .r-legendary { color: #facc15; background: rgba(250, 204, 21, 0.1); border: 1px solid rgba(250, 204, 21, 0.2); }
+
+    /* Output Pills */
+    .out-pill {
+      background: #1e1e24;
+      border: 1px solid #333;
+      color: #bbb;
+    }
+
+    /* Recycle Status */
+    .recycle-yes { color: var(--good); }
+    .recycle-no { color: var(--bad); }
+    .recycle-keep { color: var(--warn); }
+
+    /* Detailed View */
+    tr.detail-row { cursor: default; }
+    tr.detail-row:hover { background: transparent; }
+    
+    .detail-wrapper {
+      background: #0e0e12;
+      border-top: 1px solid var(--accent-primary);
+      border-bottom: 1px solid var(--panel-border);
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .detail-main h3 {
+      margin-top: 0;
+      color: #fff;
+      font-family: var(--font-tech);
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .detail-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .kv-row {
+      margin-bottom: 10px;
+    }
+    .kv-label {
+      display: block;
+      font-family: var(--font-tech);
+      color: var(--text-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .kv-val {
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+    
+    .is-selected {
+        background: rgba(255, 62, 62, 0.05) !important;
+        border-left: 3px solid var(--accent-primary);
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #444;
+      font-family: var(--font-tech);
+      font-size: 11px;
+    }
+
+    /* Mobile tweak */
+    @media(max-width: 600px){
+      .detail-wrapper { grid-template-columns: 1fr; }
+      .hide-mob { display: none; }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div id="banner"></div>
-    <header>
-      <div>
-        <h1>ARC Raiders – Item Lookup</h1>
-      </div>
-      <span class="badge" id="countBadge">0 items</span>
-    </header>
-    <section class="panel" aria-label="Lookup">
-      <div class="bar">
-        <input id="q" type="search" placeholder="Type an item name… (e.g., Dog Collar, ARC Alloy)" autocomplete="off" />
-        <button class="btn" id="clearBtn">Clear</button>
-      </div>
-      <table class="tbl" role="table" aria-label="Item results">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Rarity</th>
-            <th>Category</th>
-            <th>Safe to recycle?</th>
-            <th>Recycles into</th>
-          </tr>
-        </thead>
-        <tbody id="tbody">
-          <tr><td colspan="5" class="muted">Loading items…</td></tr>
-        </tbody>
-      </table>
-    </section>
-  <script defer src="app.js?v=7"></script>
+
+<div class="wrap">
+  <div id="banner"></div>
+  
+  <header>
+    <h1>ARC // <span>DATABASE</span></h1>
+    <div class="badge" id="countBadge">initializing...</div>
+  </header>
+
+  <div class="panel-controls">
+    <span style="padding: 10px; color: var(--accent-primary); font-family: var(--font-tech);">></span>
+    <input id="q" type="search" placeholder="SEARCH (e.g., 'Gunsmith', 'Dog Collar')" autocomplete="off" />
+    <button class="btn" id="clearBtn">X</button>
+    <button class="btn" id="downloadCSV">CSV</button>
+  </div>
+
+  <div class="table-container">
+    <table class="tbl" role="table">
+      <thead>
+        <tr>
+          <th>Item Identity</th>
+          <th class="hide-mob">Category</th>
+          <th>Recycle?</th>
+          <th class="hide-mob">Yield</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr><td colspan="4" style="text-align:center; padding: 40px; color: #555;">Accessing Mainframe...</td></tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="footer">
+    ARC RAIDERS ITEM DATABASE // v1.3 // UNAPPROVED TERMINAL ACCESS
+  </div>
+</div>
+
+<script defer src="app.js?v=8"></script>
 </body>
 </html>
