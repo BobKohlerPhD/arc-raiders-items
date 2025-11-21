@@ -174,7 +174,7 @@ function render(){
     const nameTd = document.createElement('td');
     nameTd.innerHTML = `
       <div class="item-name">${escapeHtml(it.name)}</div>
-      <span class="pill r-${it.rarity.toLowerCase()}">${escapeHtml(it.rarity)}</span>
+      <span class="pill r-${it.rarity.toLowerCase().replace(/\s/g, '-')}">${escapeHtml(it.rarity)}</span>
     `;
 
     // 2. Category
@@ -184,16 +184,28 @@ function render(){
 
     // 3. Safe?
     const safeTd = document.createElement('td');
-    let safeColor = it.recycle.safe === 'Yes' ? 'good' : (it.recycle.safe === 'No' ? 'bad' : 'warn');
-    safeTd.innerHTML = `<span style="color:var(--${safeColor}); font-weight:bold;">${escapeHtml(it.recycle.safe.toUpperCase())}</span>`;
+    // Special handling for Sellable/Keys which aren't really "Recyclable" in the crafting sense
+    let safeText = it.recycle.safe.toUpperCase();
+    let safeColor = 'warn'; // default
+    
+    if(it.recycle.safe === 'Yes') safeColor = 'good';
+    if(it.recycle.safe === 'No' || it.recycle.safe === 'Keep') safeColor = 'bad';
+    
+    safeTd.innerHTML = `<span style="color:var(--${safeColor}); font-weight:bold;">${escapeHtml(safeText)}</span>`;
 
     // 4. Outputs
     const outTd = document.createElement('td');
     outTd.className = "hide-mob";
-    if(it.recycle.outputs.length > 0){
+    
+    if(it.recycle.outputs.length > 0 && it.recycle.outputs[0] !== '(None - Sell Item)'){
+        // Normal Recyclable
         outTd.innerHTML = it.recycle.outputs.slice(0,2).map(o => `<span class="pill out-pill">${escapeHtml(o)}</span>`).join('');
         if(it.recycle.outputs.length > 2) outTd.innerHTML += `<span class="pill out-pill">+${it.recycle.outputs.length-2}</span>`;
+    } else if(it.category.includes("Trinket") || it.category.includes("Key")){
+        // Sellables
+        outTd.innerHTML = '<span style="color:#555; font-size:11px;">SELL / USE</span>';
     } else {
+        // Non-recyclable materials
         outTd.innerHTML = '<span style="opacity:0.3">—</span>';
     }
 
